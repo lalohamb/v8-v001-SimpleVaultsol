@@ -1,0 +1,20 @@
+# Your OpenAI key (must be valid)
+ENABLE_AI_AGENTS=true
+OPENAI_API_KEY=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
+
+user=0xD44d1DC5648542157d1D989580Bf4597e5d771d5
+
+# Same Cronos RPC you used above
+CRONOS_TESTNET_RPC=https://evm-t3.cronos.org
+PRIVATE_KEY=68a0f71531034a1caf6cdd323dc29cc6611f49d8a759ab3a512383aaf70155b3
+
+# Paste the EXACT address from the deployment step (no quotes)
+SIMPLE_VAULT_ADDRESS=0xe30093CF82Cb6bc4176a2e1F60B66DFb02811E8a
+
+# For now we’ll run locally on port 3000
+PORT=3000
+
+# OPTIONAL: if you want the backend to actually send agentSetWithdrawLimit txs:
+# Set this to the same test private key as in contracts/.env (or another funded test key)
+AGENT_PRIVATE_KEY=68a0f71531034a1caf6cdd323dc29cc6611f49d8a759ab3a512383aaf70155b3
+
