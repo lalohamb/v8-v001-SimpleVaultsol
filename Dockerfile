@@ -19,6 +19,6 @@ RUN npm run build
 
 WORKDIR /app
 
-EXPOSE 3000 3001
+EXPOSE 3001
 
 CMD ["sh", "-c", "cd /app/agent-service && npm start & cd /app/frontend && npm start"]
