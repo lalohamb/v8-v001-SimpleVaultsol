@@ -46,3 +46,6 @@ coverage/
 # Terminal notes
 terminal*
 zz*.md
+
+# packagae-lock.json
+package-lock.json
