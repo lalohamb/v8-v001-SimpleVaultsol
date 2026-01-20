@@ -30,6 +30,11 @@ app.use(cors({
 
 app.use(express.json());
 
+// Root endpoint
+app.get("/", (_req, res) => {
+  res.json({ service: "Cronos Sentinel AI Vault", status: "running" });
+});
+
 // Basic health endpoint for smoke testing
 app.get("/health", (_req, res) => {
   res.json({ status: "ok" });
