@@ -2,11 +2,11 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-COPY agent-service/package*.json ./
+COPY frontend/package*.json ./
 RUN npm install --production
-COPY agent-service/ .
-RUN npm install -D typescript tsx && npm run build
+COPY frontend/ .
+RUN npm run build
 
-EXPOSE 3001
+EXPOSE 3000
 
-CMD ["node", "dist/server.js"]
+CMD ["npm", "start"]
