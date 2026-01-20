@@ -20,4 +20,4 @@ WORKDIR /app
 
 EXPOSE 3000
 
-CMD ["/bin/sh", "-c", "cd /app/agent-service && PORT=3001 node dist/server.js & cd /app/frontend && exec next start -p 3000"]
+CMD ["/bin/sh", "-c", "cd /app/agent-service && PORT=3001 node dist/server.js & cd /app/frontend && exec npm start"]
