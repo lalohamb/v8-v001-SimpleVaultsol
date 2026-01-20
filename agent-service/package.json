@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p .",
-    "start": "node dist/server.js",
+    "start": "PORT=3001 node dist/server.js",
     "lint": "tsc --noEmit",
     "clean": "rm -rf dist",
     "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
