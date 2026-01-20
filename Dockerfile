@@ -18,9 +18,7 @@ COPY frontend/ .
 RUN npm run build
 
 WORKDIR /app
-COPY start.sh .
-RUN chmod +x start.sh
 
-EXPOSE 3000
+EXPOSE 3000 3001
 
-CMD ["/bin/sh", "./start.sh"]
+CMD ["/bin/sh", "-c", "cd /app/agent-service && PORT=3001 node dist/server.js & cd /app/frontend && exec next start -p 3000"]
