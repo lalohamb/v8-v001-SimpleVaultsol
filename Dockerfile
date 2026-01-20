@@ -21,6 +21,6 @@ RUN npm run build
 
 WORKDIR /app
 
-EXPOSE 3001
+EXPOSE 3000
 
-CMD node /app/agent-service/dist/server.js & cd /app/frontend && npm start
+CMD PORT=3001 node /app/agent-service/dist/server.js & cd /app/frontend && npm start -- -p 3000

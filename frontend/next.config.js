@@ -2,6 +2,16 @@
 const nextConfig = {
   reactStrictMode: true,
 
+  // API rewrites to proxy backend
+  async rewrites() {
+    return [
+      {
+        source: '/api/:path*',
+        destination: 'http://localhost:3001/:path*',
+      },
+    ];
+  },
+
   // Suppress hydration warnings from browser extensions
   onDemandEntries: {
     maxInactiveAge: 25 * 1000,
@@ -25,21 +35,6 @@ const nextConfig = {
       }
     }
     return config;
-  },
-
-  // Custom error handling
-  onError: (err) => {
-    // Suppress extension errors
-    if (
-      err.message?.includes('chainId') ||
-      err.message?.includes('getter') ||
-      err.stack?.includes('chrome-extension://') ||
-      err.stack?.includes('moz-extension://')
-    ) {
-      console.warn('Suppressed extension error:', err.message);
-      return;
-    }
-    console.error(err);
   },
 };
 
