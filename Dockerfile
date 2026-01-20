@@ -5,14 +5,14 @@ WORKDIR /app
 # Build agent-service
 COPY agent-service/package*.json ./agent-service/
 WORKDIR /app/agent-service
-RUN npm ci --only=production
-COPY agent-service/tsconfig.json agent-service/src ./
-RUN npm install -D typescript tsx && npm run build && npm prune --production
+RUN npm install --production
+COPY agent-service/ .
+RUN npm install -D typescript tsx && npm run build
 
 # Build frontend
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
-RUN npm ci --only=production
+RUN npm install --production
 COPY frontend/ ./
 RUN npm run build
 
