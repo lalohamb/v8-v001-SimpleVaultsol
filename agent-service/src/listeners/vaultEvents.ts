@@ -20,33 +20,50 @@ export async function startVaultEventListener() {
     return;
   }
 
-  const provider = new ethers.WebSocketProvider(
-    CRONOS_TESTNET_RPC.replace("http", "ws")
-  );
-
+  const provider = new ethers.JsonRpcProvider(CRONOS_TESTNET_RPC);
   const vault = new ethers.Contract(
     SIMPLE_VAULT_ADDRESS,
     SIMPLE_VAULT_ABI,
     provider
   );
 
-  console.log("[vaultEvents] Listening for Deposited and Withdrawn events...");
+  console.log("[vaultEvents] Polling for Deposited and Withdrawn events...");
 
-  vault.on("Deposited", (user: string, amount: bigint, event: any) => {
-    console.log(
-      `[vaultEvents] Deposited: user=${user}, amount=${ethers.formatEther(
-        amount
-      )} CRO, tx=${event.transactionHash}`
-    );
-    // TODO: feed this into AI logic and possibly call agentSetWithdrawLimit(...)
-  });
+  let lastBlock = await provider.getBlockNumber();
 
-  vault.on("Withdrawn", (user: string, amount: bigint, event: any) => {
-    console.log(
-      `[vaultEvents] Withdrawn: user=${user}, amount=${ethers.formatEther(
-        amount
-      )} CRO, tx=${event.transactionHash}`
-    );
-    // TODO: AI risk analysis or logging.
-  });
+  // Poll every 5 seconds
+  setInterval(async () => {
+    try {
+      const currentBlock = await provider.getBlockNumber();
+      if (currentBlock > lastBlock) {
+        const depositFilter = vault.filters.Deposited();
+        const withdrawFilter = vault.filters.Withdrawn();
+        
+        const deposits = await vault.queryFilter(depositFilter, lastBlock + 1, currentBlock);
+        const withdrawals = await vault.queryFilter(withdrawFilter, lastBlock + 1, currentBlock);
+        
+        for (const event of deposits) {
+          const log = event as ethers.EventLog;
+          console.log(
+            `[vaultEvents] Deposited: user=${log.args[0]}, amount=${ethers.formatEther(
+              log.args[1]
+            )} CRO, tx=${log.transactionHash}`
+          );
+        }
+        
+        for (const event of withdrawals) {
+          const log = event as ethers.EventLog;
+          console.log(
+            `[vaultEvents] Withdrawn: user=${log.args[0]}, amount=${ethers.formatEther(
+              log.args[1]
+            )} CRO, tx=${log.transactionHash}`
+          );
+        }
+        
+        lastBlock = currentBlock;
+      }
+    } catch (err) {
+      console.error("[vaultEvents] Polling error:", err);
+    }
+  }, 5000);
 }

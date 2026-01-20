@@ -3,9 +3,10 @@ import { getAgent, hasAgent, listAgents } from "../agents/registry.js";
 import type { AgentContext } from "../agents/types.js";
 import { clampLimit, sanitizeReason } from "../agents/clamp.js";
 import { getSimpleVaultReadonly, getSimpleVaultWithSigner } from "../contracts/simpleVault.js";
+import { checkJobPayment, getSettlementFee, getPaymentRecipient } from "../contracts/settlementPayment.js";
+import { ethers } from "ethers";
 
 const router = Router();
-const paidJobs = new Set<string>();
 
 function mustString(x: any, name: string): string {
   if (!x || typeof x !== "string") throw new Error(`Missing/invalid ${name}`);
@@ -19,11 +20,54 @@ function parseWeiOptional(x: any): bigint | undefined {
   return BigInt(s);
 }
 
-router.post("/pay", (req, res) => {
+/**
+ * GET /settlement/payment-info
+ * Returns payment information for settlements
+ */
+router.get("/payment-info", async (req, res) => {
+  try {
+    const fee = await getSettlementFee();
+    const recipient = await getPaymentRecipient();
+    const contractAddress = process.env.SETTLEMENT_PAYMENT_ADDRESS;
+
+    return res.json({
+      contractAddress,
+      fee: fee.toString(),
+      feeInCRO: ethers.formatEther(fee),
+      recipient,
+      chainId: 338,
+      chainName: "Cronos Testnet",
+      instructions: "Send payment via MetaMask by calling payForSettlement(jobId) with the fee amount"
+    });
+  } catch (e: any) {
+    return res.status(500).json({ error: e?.message || "Failed to get payment info" });
+  }
+});
+
+/**
+ * POST /settlement/verify-payment
+ * Verify if a job has been paid for on-chain
+ */
+router.post("/verify-payment", async (req, res) => {
   try {
     const jobId = mustString(req.body?.jobId, "jobId");
-    paidJobs.add(jobId);
-    return res.json({ status: "payment_accepted", jobId });
+
+    const payment = await checkJobPayment(jobId);
+
+    if (payment.isPaid) {
+      return res.json({
+        status: "paid",
+        jobId,
+        payer: payment.payer,
+        amount: payment.amount.toString(),
+        amountInCRO: ethers.formatEther(payment.amount)
+      });
+    } else {
+      return res.json({
+        status: "unpaid",
+        jobId
+      });
+    }
   } catch (e: any) {
     return res.status(400).json({ error: e?.message || "Bad request" });
   }
@@ -45,17 +89,27 @@ router.post("/run", async (req, res) => {
     const user = mustString(req.body?.user, "user");
     const agentIdRaw = mustString(req.body?.agentId, "agentId");
 
-    // x402 gate (demo)
-    if (!paidJobs.has(jobId)) {
+    // x402 gate - verify on-chain payment
+    const payment = await checkJobPayment(jobId);
+
+    if (!payment.isPaid) {
+      const fee = await getSettlementFee();
+      const recipient = await getPaymentRecipient();
+      const contractAddress = process.env.SETTLEMENT_PAYMENT_ADDRESS;
+
       return res.status(402).json({
         error: "Payment Required",
         x402: {
           jobId,
-          amount: "1.00",
-          asset: "USDC",
+          contractAddress,
+          amount: ethers.formatEther(fee),
+          amountWei: fee.toString(),
+          asset: "TCRO",
           chain: "Cronos Testnet",
-          recipient: "merchant-demo-address",
-          memo: `x402 settlement job ${jobId}`
+          chainId: 338,
+          recipient,
+          memo: `x402 settlement job ${jobId}`,
+          instructions: "Call payForSettlement(jobId) on the SettlementPayment contract with the fee amount"
         }
       });
     }

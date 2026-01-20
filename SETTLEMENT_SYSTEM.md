@@ -5,6 +5,37 @@
 The Cronos AI Platform implements an **x402-based settlement system** that combines AI-powered decision-making with programmable payment rails. This system enables automated, policy-controlled settlement execution with built-in payment verification.
 
 ---
+// User Story: Settlement System
+
+/**
+ * As a merchant using the Cronos AI Platform
+ * I want to settle my daily sales revenue
+ * So that I can receive my funds in my preferred currency
+ * 
+ * Acceptance Criteria:
+ * 
+ * Given I am a merchant with sales revenue
+ * When I request a settlement
+ * Then I should receive a payment request (402 Payment Required)
+ * 
+ * Given I have paid the settlement fee
+ * When I submit my settlement request
+ * Then the AI agent should evaluate my request and propose a safe limit
+ * 
+ * Given the AI agent has approved my request
+ * When the settlement executes
+ * Then my funds should be transferred according to my preferences
+ * And I should receive confirmation of the settlement
+ * 
+ * Example Flow:
+ * 1. Merchant has 1000 USDC in sales
+ * 2. Merchant requests settlement
+ * 3. System requires 1 USDC fee payment
+ * 4. Merchant pays fee
+ * 5. AI agent evaluates and approves 400 USDC limit
+ * 6. Settlement executes within approved limit
+ * 7. Merchant receives funds in preferred currency
+ */
 
 ## 📋 What is x402?
 
@@ -88,9 +119,23 @@ The Cronos AI Platform implements an **x402-based settlement system** that combi
 
 ## 🔌 API Endpoints
 
-### 1. **POST /settlement/pay**
+### 1. **Smart Contract Payment: `payForSettlement(jobId)`**
 
-**Purpose**: Simulate payment for a settlement job (x402 payment gate)
+**Purpose**: Pay for a settlement job on-chain (x402 payment gate)
+
+**Contract**: `SettlementPayment.sol` at `SETTLEMENT_PAYMENT_ADDRESS`
+
+**Method:**
+```solidity
+function payForSettlement(string calldata jobId) external payable
+```
+
+**Payment:**
+- Send TCRO >= `settlementFee` (default: 1 TCRO)
+- JobId is hashed and stored on-chain
+- Payment is immediately transferred to recipient
+
+**Verification Endpoint: POST /settlement/verify-payment**
 
 **Request:**
 ```json
@@ -99,17 +144,29 @@ The Cronos AI Platform implements an **x402-based settlement system** that combi
 }
 ```
 
-**Response:**
+**Response (Paid):**
 ```json
 {
-  "status": "payment_accepted",
+  "status": "paid",
+  "jobId": "job-001",
+  "payer": "0x1234...",
+  "amount": "1000000000000000000",
+  "amountInCRO": "1.0"
+}
+```
+
+**Response (Unpaid):**
+```json
+{
+  "status": "unpaid",
   "jobId": "job-001"
 }
 ```
 
 **Implementation:**
-- Adds jobId to in-memory `paidJobs` set
-- In production: Would verify actual on-chain payment (USDC, CRO, etc.)
+- On-chain payment verification via `SettlementPayment` contract
+- Backend calls `checkPayment(jobId)` to verify payment
+- Fully decentralized payment tracking
 
 ---
 
@@ -157,11 +214,15 @@ The Cronos AI Platform implements an **x402-based settlement system** that combi
   "error": "Payment Required",
   "x402": {
     "jobId": "job-001",
-    "amount": "1.00",
-    "asset": "USDC",
+    "contractAddress": "0xF5C2d702A0d483D4Be9c00E44f2C753aa54F1db0",
+    "amount": "1.0",
+    "amountWei": "1000000000000000000",
+    "asset": "TCRO",
     "chain": "Cronos Testnet",
-    "recipient": "merchant-demo-address",
-    "memo": "x402 settlement job job-001"
+    "chainId": 338,
+    "recipient": "0x...",
+    "memo": "x402 settlement job job-001",
+    "instructions": "Call payForSettlement(jobId) on the SettlementPayment contract with the fee amount"
   }
 }
 ```
@@ -184,19 +245,21 @@ The Cronos AI Platform implements an **x402-based settlement system** that combi
 
 ## 💳 Payment Rails Supported
 
-### Current Implementation (Demo)
+### Current Implementation (Production-Ready)
 
-The current implementation is a **proof-of-concept** that demonstrates the x402 pattern:
+The current implementation uses **on-chain payment verification** via smart contracts:
 
-**Payment Method**: In-memory tracking
-- `paidJobs` Set stores paid job IDs
-- No actual on-chain payment verification
-- Simulates payment acceptance
+**Payment Method**: On-chain via `SettlementPayment` contract
+- Payments recorded on-chain in `paidJobs` mapping
+- Backend verifies payment by calling `checkPayment(jobId)` on contract
+- Fully decentralized payment tracking
+- Immediate payment transfer to recipient
 
-**Specified Asset**: USDC
-- x402 response specifies "1.00 USDC"
-- Chain: Cronos Testnet
-- Recipient: merchant-demo-address (placeholder)
+**Payment Asset**: TCRO (Cronos Testnet native token)
+- x402 response specifies "1.0 TCRO" (configurable)
+- Chain: Cronos Testnet (Chain ID: 338)
+- Contract: `0xF5C2d702A0d483D4Be9c00E44f2C753aa54F1db0`
+- Recipient: Configurable via contract owner
 
 ---
 
@@ -462,11 +525,15 @@ POST /settlement/run
 **Scenario**: SaaS platform withdraws subscription fees
 
 ```typescript
-// Step 1: Pay for settlement
-POST /settlement/pay
+// Step 1: Pay for settlement (on-chain)
+// Call payForSettlement("subscription-withdrawal-dec") on SettlementPayment contract
+// Send 1 TCRO with the transaction
+
+// Step 2: Verify payment (optional)
+POST /settlement/verify-payment
 { "jobId": "subscription-withdrawal-dec" }
 
-// Step 2: Execute settlement
+// Step 3: Execute settlement
 POST /settlement/run
 {
   "jobId": "subscription-withdrawal-dec",

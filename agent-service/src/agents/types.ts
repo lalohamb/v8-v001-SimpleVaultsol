@@ -2,6 +2,7 @@ export type AgentId =
   | "settlement-batch-optimizer"
   | "withdrawal-risk-sentinel"
   | "emergency-brake"
+  | "gas-fee-monitor"
   | "02portfolio-rebalancer-ai";
 
 export type AgentContext = {

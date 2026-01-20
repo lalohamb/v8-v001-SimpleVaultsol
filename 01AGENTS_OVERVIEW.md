@@ -1,4 +1,4 @@
-# AI Agents Overview - Cronos AI Platform
+# AI Agents Overview - SENTINEL Cronos AI Vault Platform
 
 ## 🤖 Available AI Agents
 

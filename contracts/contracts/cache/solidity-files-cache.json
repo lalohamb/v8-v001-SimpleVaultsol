@@ -36,6 +36,78 @@
       "artifacts": [
         "SimpleVault"
       ]
+    },
+    "/home/lalo/_BoltAI/CRONOS-HACKATHON/v3 v001 SimpleVaultsol/contracts/contracts/SettlementPayment.sol": {
+      "lastModificationDate": 1766547057902,
+      "contentHash": "87c1cbece87e260ca33de8e339fc409e",
+      "sourceName": "contracts/SettlementPayment.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "SettlementPayment"
+      ]
+    },
+    "/home/lalo/_BoltAI/CRONOS-HACKATHON/v3 v001 SimpleVaultsol/contracts/contracts/SimpleVault.sol": {
+      "lastModificationDate": 1765868083324,
+      "contentHash": "525a4148eb598fc1ca7278d848c93d36",
+      "sourceName": "contracts/SimpleVault.sol",
+      "solcConfig": {
+        "version": "0.8.24",
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "evmVersion": "paris",
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.24"
+      ],
+      "artifacts": [
+        "SimpleVault"
+      ]
     }
   }
 }

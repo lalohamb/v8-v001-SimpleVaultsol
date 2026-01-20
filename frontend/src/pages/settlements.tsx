@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import SettlementResult from "../components/SettlementResult";
-import { listAgents, payForSettlement, runSettlement, etherToWei } from "../lib/api";
+import SettlementPaymentForm from "../components/SettlementPaymentForm";
+import { listAgents, runSettlement, etherToWei } from "../lib/api";
 import type { AgentInfo, AgentId, SettlementRunResponse } from "../types/api";
 
 export default function SettlementsPage() {
@@ -14,7 +15,6 @@ export default function SettlementsPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SettlementRunResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
-  const [paymentInfo, setPaymentInfo] = useState<any>(null);
 
   useEffect(() => {
     async function loadAgents() {
@@ -31,25 +31,14 @@ export default function SettlementsPage() {
     loadAgents();
   }, []);
 
-  async function handlePayment(e: React.FormEvent) {
-    e.preventDefault();
-    if (!jobId) {
-      setError("Please enter a job ID");
-      return;
-    }
+  function handlePaymentSuccess() {
+    setIsPaid(true);
+    setError(null);
+  }
 
-    try {
-      setLoading(true);
-      setError(null);
-
-      const response = await payForSettlement({ jobId });
-      setIsPaid(true);
-      setPaymentInfo(response);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to process payment");
-    } finally {
-      setLoading(false);
-    }
+  function handlePaymentError(errorMsg: string) {
+    setError(errorMsg);
+    setIsPaid(false);
   }
 
   async function handleRunSettlement(e: React.FormEvent) {
@@ -63,7 +52,6 @@ export default function SettlementsPage() {
       setLoading(true);
       setError(null);
       setResult(null);
-      setPaymentInfo(null);
 
       const requestedAmountWei = requestedAmount
         ? etherToWei(requestedAmount)
@@ -79,8 +67,7 @@ export default function SettlementsPage() {
       setResult(response);
     } catch (err: any) {
       if (err.type === "payment_required") {
-        setPaymentInfo(err.data);
-        setError("Payment required. Please pay first.");
+        setError("Payment required. Please complete Step 1 first.");
       } else if (err.type === "refused") {
         setError(
           `Settlement refused: ${err.data.reason}. ${err.data.guidance || ""}`
@@ -97,13 +84,140 @@ export default function SettlementsPage() {
     <Layout>
       <div className="settlements-page">
         <h1>Settlement Console</h1>
-        <p className="subtitle">Execute x402 settlement workflows</p>
+        <p className="subtitle">Execute x402 payment-gated settlement workflows</p>
+
+        {/* Documentation Section */}
+        <div className="settlement-docs">
+          <div className="docs-card">
+            <h2>📋 What is a Settlement?</h2>
+            <p>
+              A <strong>settlement</strong> is a payment-gated workflow that uses AI agents to analyze vault state
+              and recommend safe withdrawal limits before executing multi-step settlement operations. This implements
+              the <strong>x402 Payment Required</strong> protocol, where settlements must be paid for before execution.
+            </p>
+          </div>
+
+          <div className="docs-grid">
+            <div className="docs-card">
+              <h3>🔑 What is a Job ID?</h3>
+              <p>
+                A <strong>Job ID</strong> is a unique identifier for your settlement request (e.g., "job-001", "settlement-abc").
+                It tracks the payment status and links the payment (Step 1) to the execution (Step 2).
+                You can use any string, but it must be the same in both steps.
+              </p>
+              <div className="example-box">
+                <strong>Examples:</strong>
+                <ul>
+                  <li><code>job-001</code> - Simple numeric ID</li>
+                  <li><code>settlement-2024-001</code> - Date-based ID</li>
+                  <li><code>user-alice-batch-1</code> - User-specific ID</li>
+                </ul>
+              </div>
+            </div>
+
+            <div className="docs-card">
+              <h3>⚙️ Parameters Explained</h3>
+              <ul className="param-list">
+                <li>
+                  <strong>Job ID</strong> (required) - Unique identifier for this settlement
+                </li>
+                <li>
+                  <strong>User Address</strong> (required) - The wallet address to analyze (0x...)
+                </li>
+                <li>
+                  <strong>Agent</strong> (required) - Which AI agent to use for analysis
+                </li>
+                <li>
+                  <strong>Requested Amount</strong> (optional) - Amount you want to withdraw in CRO.
+                  If provided, the agent will validate if it's safe. If omitted, the agent will recommend
+                  an optimal limit based on your vault balance.
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div className="docs-card workflow-card">
+            <h2>🔄 Two-Step Workflow</h2>
+            <div className="workflow-steps">
+              <div className="workflow-step">
+                <div className="step-number">1</div>
+                <div className="step-content">
+                  <h3>Payment (x402)</h3>
+                  <p>
+                    <strong>Purpose:</strong> Pay for the settlement service before execution.
+                  </p>
+                  <p>
+                    <strong>What happens:</strong> You submit a Job ID and pay <strong>1.0 TCRO</strong> via MetaMask.
+                    The payment is sent to the SettlementPayment smart contract on Cronos Testnet, which marks
+                    this Job ID as "paid" on-chain and allows you to proceed to Step 2.
+                  </p>
+                  <p>
+                    <strong>Why it's needed:</strong> The x402 protocol ensures settlements are paid for
+                    before consuming computational resources (AI analysis, blockchain transactions).
+                  </p>
+                  <div className="step-note">
+                    💡 <strong>Note:</strong> This uses real blockchain payments in TCRO. Make sure you have
+                    MetaMask installed and connected to Cronos Testnet with sufficient TCRO balance.
+                  </div>
+                </div>
+              </div>
+
+              <div className="workflow-step">
+                <div className="step-number">2</div>
+                <div className="step-content">
+                  <h3>Run Settlement</h3>
+                  <p>
+                    <strong>Purpose:</strong> Execute the AI-powered settlement analysis and on-chain transaction.
+                  </p>
+                  <p>
+                    <strong>What happens:</strong>
+                  </p>
+                  <ol className="step-list">
+                    <li>System verifies the Job ID was paid (from Step 1)</li>
+                    <li>Reads your current vault balance and withdrawal limit from the blockchain</li>
+                    <li>Selected AI agent analyzes your vault state and recommends a safe withdrawal limit</li>
+                    <li>System applies safety clamps (max 50% of balance by default)</li>
+                    <li>If you provided a requested amount, validates it doesn't exceed the recommended limit</li>
+                    <li>Writes the new recommended limit to the blockchain via <code>agentSetWithdrawLimit()</code></li>
+                    <li>Executes settlement pipeline (validate, calculate fees, route payouts, finalize)</li>
+                  </ol>
+                  <div className="step-note">
+                    ⚠️ <strong>Enforcement:</strong> If your requested amount exceeds the AI-recommended limit,
+                    the settlement will be <strong>refused</strong> with a 409 Conflict error.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="docs-card">
+            <h2>🤖 Agent Selection</h2>
+            <p>
+              Different agents use different strategies to recommend withdrawal limits:
+            </p>
+            <ul className="agent-strategy-list">
+              <li>
+                <strong>Portfolio Rebalancer AI</strong> - Uses GPT-4 for intelligent analysis (if AI enabled),
+                falls back to 20% of balance
+              </li>
+              <li>
+                <strong>Settlement Batch Optimizer</strong> - Recommends 40% of balance, optimized for batch operations
+              </li>
+              <li>
+                <strong>Withdrawal Risk Sentinel</strong> - Conservative approach, starts at 50% and tightens by 5% on subsequent calls
+              </li>
+              <li>
+                <strong>Emergency Brake</strong> - Crisis mode, recommends only 10% for high-risk situations
+              </li>
+            </ul>
+          </div>
+        </div>
 
         <div className="page-grid">
           <div className="left-panel">
             <section className="section">
               <h2>Step 1: Payment (x402)</h2>
-              <form onSubmit={handlePayment} className="settlement-form">
+              <div className="settlement-form">
                 <div className="form-group">
                   <label htmlFor="jobId">Job ID *</label>
                   <input
@@ -116,23 +230,14 @@ export default function SettlementsPage() {
                   />
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={loading || isPaid}
-                  className="btn-secondary"
-                >
-                  {isPaid ? "✓ Paid" : loading ? "Processing..." : "Pay for Settlement"}
-                </button>
-              </form>
-
-              {paymentInfo && paymentInfo.x402 && (
-                <div className="payment-info">
-                  <h4>Payment Required</h4>
-                  <p>Amount: {paymentInfo.x402.amount} {paymentInfo.x402.asset}</p>
-                  <p>Chain: {paymentInfo.x402.chain}</p>
-                  <p className="small">Memo: {paymentInfo.x402.memo}</p>
-                </div>
-              )}
+                {jobId && (
+                  <SettlementPaymentForm
+                    jobId={jobId}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onPaymentError={handlePaymentError}
+                  />
+                )}
+              </div>
             </section>
 
             <section className="section">

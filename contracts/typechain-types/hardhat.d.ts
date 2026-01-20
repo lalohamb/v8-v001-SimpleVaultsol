@@ -14,10 +14,19 @@ import * as Contracts from ".";
 declare module "hardhat/types/runtime" {
   interface HardhatEthersHelpers extends HardhatEthersHelpersBase {
     getContractFactory(
+      name: "SettlementPayment",
+      signerOrOptions?: ethers.Signer | FactoryOptions
+    ): Promise<Contracts.SettlementPayment__factory>;
+    getContractFactory(
       name: "SimpleVault",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.SimpleVault__factory>;
 
+    getContractAt(
+      name: "SettlementPayment",
+      address: string | ethers.Addressable,
+      signer?: ethers.Signer
+    ): Promise<Contracts.SettlementPayment>;
     getContractAt(
       name: "SimpleVault",
       address: string | ethers.Addressable,
@@ -25,10 +34,19 @@ declare module "hardhat/types/runtime" {
     ): Promise<Contracts.SimpleVault>;
 
     deployContract(
+      name: "SettlementPayment",
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.SettlementPayment>;
+    deployContract(
       name: "SimpleVault",
       signerOrOptions?: ethers.Signer | DeployContractOptions
     ): Promise<Contracts.SimpleVault>;
 
+    deployContract(
+      name: "SettlementPayment",
+      args: any[],
+      signerOrOptions?: ethers.Signer | DeployContractOptions
+    ): Promise<Contracts.SettlementPayment>;
     deployContract(
       name: "SimpleVault",
       args: any[],

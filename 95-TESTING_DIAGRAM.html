@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cronos Sentinel AI Vault - Testing Infrastructure</title>
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 40px;
+            font-size: 1.2em;
+        }
+        .mermaid {
+            display: flex;
+            justify-content: center;
+            margin: 40px 0;
+        }
+        .legend {
+            margin-top: 40px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        .legend h3 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        .legend-item {
+            display: inline-block;
+            margin: 10px 20px 10px 0;
+            padding: 8px 16px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 500;
+        }
+        .legend-comprehensive { background: #4CAF50; }
+        .legend-quick { background: #2196F3; }
+        .legend-agent { background: #FF9800; }
+        .legend-frontend { background: #9C27B0; }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 3em;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .stat-label {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Cronos Sentinel AI Vault</h1>
+        <div class="subtitle">Automated Testing Infrastructure</div>
+        
+        <div class="mermaid">
+graph TB
+    Start([Test Automation]) --> Root{Root Level Scripts}
+    
+    Root --> TestAll[test-all.sh<br/>Comprehensive Suite]
+    Root --> TestQuick[test-quick.sh<br/>Quick Suite]
+    
+    TestAll --> AS1[Agent Service<br/>Type Check]
+    TestAll --> AS2[Agent Service<br/>Jest Tests<br/>23 tests]
+    TestAll --> AS3[Agent Service<br/>API Tests<br/>9 tests]
+    TestAll --> FE1[Frontend<br/>Type Check]
+    TestAll --> FE2[Frontend<br/>Build]
+    
+    TestQuick --> AS1
+    TestQuick --> FE1
+    TestQuick --> FE2
+    
+    AS2 --> Jest1[Contract Integration<br/>5 tests]
+    AS2 --> Jest2[Read Operations<br/>3 tests]
+    AS2 --> Jest3[Write Operations<br/>6 tests]
+    AS2 --> Jest4[Error Handling<br/>3 tests]
+    AS2 --> Jest5[Gas Analysis<br/>1 test]
+    AS2 --> Jest6[Integration<br/>3 tests]
+    AS2 --> Jest7[Real-World<br/>2 tests]
+    
+    AS3 --> API1[Health Check]
+    AS3 --> API2[List Agents]
+    AS3 --> API3[Payment Info]
+    AS3 --> API4[Apply Agents<br/>5 tests]
+    AS3 --> API5[Payment Gate<br/>2 tests]
+    
+    FE2 --> Build1[4 Pages Generated]
+    FE2 --> Build2[Bundle Optimized]
+    
+    style TestAll fill:#4CAF50,stroke:#2E7D32,color:#fff
+    style TestQuick fill:#2196F3,stroke:#1565C0,color:#fff
+    style AS2 fill:#FF9800,stroke:#E65100,color:#fff
+    style AS3 fill:#FF9800,stroke:#E65100,color:#fff
+    style FE2 fill:#9C27B0,stroke:#6A1B9A,color:#fff
+    style Start fill:#607D8B,stroke:#37474F,color:#fff
+        </div>
+
+        <div class="legend">
+            <h3>📊 Test Suite Legend</h3>
+            <span class="legend-item legend-comprehensive">Comprehensive Suite (test-all.sh)</span>
+            <span class="legend-item legend-quick">Quick Suite (test-quick.sh)</span>
+            <span class="legend-item legend-agent">Agent Service Tests</span>
+            <span class="legend-item legend-frontend">Frontend Tests</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Total Tests</div>
+                <div class="stat-number">32+</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Jest Tests</div>
+                <div class="stat-number">23</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">API Tests</div>
+                <div class="stat-number">9</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Test Duration</div>
+                <div class="stat-number">~4m</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'default',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+</body>
+</html>
+

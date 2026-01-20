@@ -3,6 +3,8 @@ import { listAgents, getAgent } from "../agents/registry.js";
 import type { AgentId, AgentContext } from "../agents/types.js";
 import { clampLimit, sanitizeReason } from "../agents/clamp.js";
 import { getSimpleVaultReadonly, getSimpleVaultWithSigner } from "../contracts/simpleVault.js";
+import fs from "fs";
+import path from "path";
 
 const router = Router();
 
@@ -112,6 +114,60 @@ router.post("/apply", async (req, res) => {
         reason: decision.reason,
         clampNotes: notes
       }
+    });
+  } catch (e: any) {
+    return res.status(400).json({ error: e?.message || "Bad request" });
+  }
+});
+
+/**
+ * POST /agents/toggle-ai
+ * Body: { "enabled": true/false }
+ * Toggles AI mode on/off by updating the ENABLE_AI_AGENTS env variable
+ */
+router.post("/toggle-ai", async (req, res) => {
+  try {
+    const enabled = req.body?.enabled === true;
+
+    // Update the environment variable in memory
+    process.env.ENABLE_AI_AGENTS = enabled ? "true" : "false";
+
+    // Also update the .env file for persistence
+    const envPath = path.join(process.cwd(), ".env");
+
+    try {
+      let envContent = "";
+      if (fs.existsSync(envPath)) {
+        envContent = fs.readFileSync(envPath, "utf-8");
+      }
+
+      // Update or add ENABLE_AI_AGENTS
+      const lines = envContent.split("\n");
+      let found = false;
+      const updatedLines = lines.map(line => {
+        if (line.startsWith("ENABLE_AI_AGENTS=")) {
+          found = true;
+          return `ENABLE_AI_AGENTS=${enabled}`;
+        }
+        return line;
+      });
+
+      if (!found) {
+        updatedLines.push(`ENABLE_AI_AGENTS=${enabled}`);
+      }
+
+      fs.writeFileSync(envPath, updatedLines.join("\n"));
+    } catch (fileError) {
+      console.warn("Could not update .env file:", fileError);
+      // Continue anyway - the in-memory change is what matters for current session
+    }
+
+    const aiEnabled = process.env.ENABLE_AI_AGENTS === "true" && !!process.env.OPENAI_API_KEY;
+
+    return res.json({
+      status: "ok",
+      aiEnabled,
+      message: `AI mode ${aiEnabled ? "enabled" : "disabled"}`
     });
   } catch (e: any) {
     return res.status(400).json({ error: e?.message || "Bad request" });

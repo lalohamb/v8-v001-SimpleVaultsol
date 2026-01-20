@@ -3,6 +3,7 @@ import type { Agent, AgentId } from "./types";
 import { settlementBatchOptimizer } from "./settlement-batch-optimizer/index.js";
 import { withdrawalRiskSentinel } from "./withdrawal-risk-sentinel/index.js";
 import { emergencyBrake } from "./emergency-brake/index.js";
+import { gasFeeMonitor } from "./gas-fee-monitor/index.js";
 
 import { portfolioRebalancerAI } from "./02portfolio-rebalancer-ai/index.js";
 
@@ -10,6 +11,7 @@ const AGENTS: Record<AgentId, Agent> = {
   "settlement-batch-optimizer": settlementBatchOptimizer,
   "withdrawal-risk-sentinel": withdrawalRiskSentinel,
   "emergency-brake": emergencyBrake,
+  "gas-fee-monitor": gasFeeMonitor,
   "02portfolio-rebalancer-ai": portfolioRebalancerAI
 };
 
@@ -18,6 +20,7 @@ const AGENT_META: Record<AgentId, { aiCapable: boolean }> = {
   "settlement-batch-optimizer": { aiCapable: false },
   "withdrawal-risk-sentinel": { aiCapable: false },
   "emergency-brake": { aiCapable: false },
+  "gas-fee-monitor": { aiCapable: false },
   "02portfolio-rebalancer-ai": { aiCapable: true }
 };
 

@@ -7,12 +7,24 @@ dotenv.config();
 // ESM + NodeNext: local imports must include .js
 import agentsRoutes from "./routes/agents.js";
 import settlementsRoutes from "./routes/settlements.js";
+import { startVaultEventListener } from "./listeners/vaultEvents.js";
 
 const app = express();
 
-// Enable CORS for frontend (running on port 3001)
+// Enable CORS for frontends (running on ports 3001 and 3002)
+const allowedOrigins = [
+  process.env.FRONTEND_URL || "http://localhost:3001",
+  "http://localhost:3002"
+];
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:3001",
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
 
@@ -32,4 +44,10 @@ const PORT = Number.parseInt(process.env.PORT || "3000", 10);
 
 app.listen(PORT, () => {
   console.log(`Agent service listening on http://localhost:${PORT}`);
+  console.log(`CORS enabled for: ${allowedOrigins.join(", ")}`);
+  
+  // Start blockchain event listeners
+  startVaultEventListener().catch((err) => {
+    console.error("Failed to start vault event listener:", err);
+  });
 });

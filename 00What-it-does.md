@@ -1,148 +1,164 @@
 # What It Does — In Plain, Direct Terms
 
-The **Crypto.com AI Agent SDK**, when integrated into Cronos EVM dApps, services, or payment flows, allows AI agents to observe, reason about, and take action on blockchain activity — safely, automatically, and under strict rules.
+The **SENTINEL Cronos AI Vault Platform** is a production-ready vault management system that demonstrates how AI agents can monitor, optimize, and protect DeFi operations on Cronos EVM — safely, automatically, and with complete transparency.
 
-> Think of it as embedding a smart, policy-controlled automated operator directly inside your Cronos ecosystem.
+> Think of it as a self-monitoring, self-optimizing vault with AI-powered risk management built directly into the platform.
 
-## 1. AI Agents Become Part of Your dApp's Workflow
+## 1. AI Agents Monitor Your Vault Operations
 
-Instead of your application doing everything manually, the AI agent:
+Instead of manual vault management, the AI agents:
 
-- **Watches on-chain events**
-  - Failed payments, high slippage swaps, liquidity drops, subscription renewals
+- **Watch vault activity**
+  - Deposits, withdrawals, balance changes, unusual patterns
 
-- **Reads relevant off-chain data**
-  - User profile, merchant behavior, fraud signals, account history, settlement records
+- **Read real-time blockchain data**
+  - User balances, transaction history, market conditions, gas prices
 
-- **Understands the business rule logic**
-  - Through the SDK's tools, guardrails, and predefined policies
+- **Apply intelligent risk assessment**
+  - Through 4 specialized agents with hybrid intelligence (3 deterministic + 1 AI-powered)
 
-- **Decides on appropriate next steps**
-  - Based on thresholds, limits, governance rules
+- **Provide advisory recommendations**
+  - Based on risk thresholds, market conditions, and user behavior patterns
 
-- **Executes an allowed on-chain action** like:
-  - Routing a swap
-  - Retrying a payment
-  - Rebalancing a vault
-  - Allocating liquidity
-  - Triggering gas top-ups
-  - Proposing a governance update
-  - Adjusting settlement routing
+- **Execute policy-controlled actions** like:
+  - Adjusting withdrawal limits
+  - Optimizing settlement batches
+  - Triggering emergency protections
+  - Rebalancing recommendations
 
-> Always within strict risk and permission boundaries.
+> Always within strict safety boundaries — agents advise, users decide.
 
-## 2. It Creates "AI-Operated Smart Contracts"
+## 2. It Creates "AI-Monitored Smart Vaults"
 
-Developers add simple "agent hooks" to their Cronos contracts.
+The SimpleVault contract includes agent advisory hooks:
 
 **Example:**
 ```solidity
-function requestRebalance() external onlyAgent { ... }
-function autoTopUpGas() external onlyAgentWithinLimits { ... }
+function agentSetWithdrawLimit(address user, uint256 newLimit) external onlyAgent {
+    // Agent can recommend limits, user maintains control
+}
 ```
 
-These give agents controlled entry points into your on-chain system.
+These give agents controlled advisory access to vault parameters.
 
-- ✅ Smart contracts stay deterministic and rule-based
-- ✅ Agents provide flexible decision intelligence around them
+- ✅ Smart contracts stay deterministic and secure
+- ✅ Agents provide intelligent optimization recommendations
+- ✅ Users maintain full control over their funds
 
-## 3. It Lets dApps Automate Complex Tasks Without Human Handling
+## 3. It Automates Vault Management Without Removing User Control
 
-### Example Automations:
+### The 4 Production Agents (Hybrid Intelligence):
 
-#### Payments
-- Detect upcoming subscription failures
-- Propose swaps to stablecoins
-- Retry failed payments after AI evaluation
-- Optimize gas costs
+#### Withdrawal Risk Sentinel (Deterministic)
+- Detects abnormal withdrawal patterns
+- Recommends tightening limits by 5% when risk detected
+- Protects against potential exploits
 
-#### DeFi
-- Monitor liquidation risk
-- Automatically shift liquidity between pools
-- Adjust strategies when markets change
+#### Emergency Brake (Deterministic)
+- Monitors market volatility and system health
+- Clamps withdrawal limits to 10-25% during emergencies
+- Provides automatic circuit breaker functionality
 
-#### Treasury & Merchants
-- Decide when to convert CRO → USDC
-- Generate explanations for fee spikes
-- Recommend settlement preferences
-- Track anomalies and fraud patterns
+#### Settlement Batch Optimizer (Deterministic)
+- Optimizes gas costs for vault operations
+- Maintains 40% baseline efficiency
+- Reduces operational costs
 
-> All of this is done by agents running continuously, not by humans logging in.
+#### Portfolio Rebalancer AI (AI-Powered + Fallback)
+- **AI Mode**: OpenAI GPT-4o-mini powered intelligent recommendations (when `ENABLE_AI_AGENTS=true` + `OPENAI_API_KEY` set)
+- **Fallback Mode**: Deterministic 20% baseline when AI disabled/unavailable
+- Considers market conditions and user preferences
+- **Only agent that uses AI** - the other 3 are purely rule-based
 
-## 4. It Improves UX by Embedding AI Into Frontends
+> **Hybrid Intelligence**: 3 deterministic agents + 1 optional AI agent with deterministic fallback ensures reliability.
 
-The SDK supports:
-- In-wallet assistants
-- Checkout assistants
-- Merchant dashboard copilots
-- Portfolio explainers
+## 4. It Provides Professional Vault Management UX
 
-### Examples:
-- *"Why did my fee increase?"*
-- *"Which route should I choose for lowest slippage?"*
-- *"Should I pay with CRO or USDC right now?"*
-- *"What changed in my vault APR this week?"*
+The platform includes:
+- **Wallet Integration**: MetaMask connection with auto-network switching
+- **Real-time Dashboard**: Live balance updates from blockchain
+- **Agent Console**: Execute agents and view AI decisions
+- **Settlement Console**: x402 payment workflows
 
-> This is AI running locally in your dApp context with your business rules.
+### User Experience:
+- *"Why did my withdrawal limit change?"* — View agent reasoning with confidence scores
+- *"Which agent should I run?"* — Clear descriptions and recommendations
+- *"Is my vault secure?"* — Real-time risk monitoring and alerts
+- *"How can I optimize costs?"* — Settlement batch optimization suggestions
+
+> This is AI running in a production vault with your actual funds and real blockchain state.
 
 ## 5. It Ensures Safety, Controls, and Auditability
 
-The SDK is built around **enterprise guardrails**, meaning:
+The platform is built around **enterprise-grade safety**, meaning:
 
-❌ Agents cannot run wild or access everything.
+❌ Agents cannot access your private keys or force transactions.
 
-✅ They are given:
-- Very specific RPC permissions
-- On-chain limits (daily caps, slippage caps, withdraw whitelists)
-- Rule-based approval logic
-- Mandatory human approval for high-risk changes
-- A full audit trail of every action
+✅ They provide:
+- Advisory-only recommendations (you approve all transactions)
+- Policy-controlled limits (maximum 50% recommendations)
+- Confidence scoring for AI decisions (Portfolio Rebalancer only)
+- Deterministic fallbacks when AI unavailable
+- Complete audit trail of every recommendation
+- Real-time blockchain verification
 
-> Every agent decision is logged, reproducible, and replayable.
+> **Safety First**: Even the AI agent has deterministic fallbacks - the system works reliably whether AI is enabled or not.
 
-## 6. It Reduces Operational Load for Developers
+## 6. It's Production-Ready Today
 
-### Without the SDK, you must build:
-- Your own monitoring system
-- Your own script automation
-- Your own risk checks
-- Your own off-chain/on-chain integrations
-- Your own governance workflows
-- Your own business rule engine
+### Without this platform, you must build:
+- Your own vault smart contract
+- Your own AI agent infrastructure
+- Your own risk monitoring system
+- Your own settlement optimization
+- Your own Web3 frontend integration
+- Your own policy enforcement
 
-### The SDK bundles all of this into one consistent agent platform.
+### The platform provides all of this as a complete system:
 
-### You get:
-- ✅ Unified Cronos contract bindings
-- ✅ AI agent lifecycle management
-- ✅ Prebuilt tools for swapping, routing, checking balances, etc.
-- ✅ Event listeners for Cronos
-- ✅ Policy enforcement
-- ✅ Security wrappers
+- ✅ Deployed SimpleVault contract on Cronos Testnet
+- ✅ 4 production-ready agents (3 deterministic + 1 AI-enhanced)
+- ✅ Professional Web3 frontend with MetaMask integration
+- ✅ Real-time blockchain data integration
+- ✅ Agent execution API and console
+- ✅ Settlement workflow system
+- ✅ Complete audit trail and transparency
 
-> This dramatically reduces lift for developers who want AI features.
+> Deploy to Cronos mainnet with a single command.
 
-## 7. It Turns Cronos Into an AI-Native Blockchain
+## 7. It Demonstrates Hybrid Intelligence on Cronos
 
-By embedding agents at every level (contract → backend → UI → payments), the chain supports:
+By combining deterministic agents with optional AI enhancement, the platform enables:
 
-- 🤖 Self-healing dApps
-- 📈 Self-optimizing strategies
-- 🎯 Intelligent UX
-- ⚡ AI-governed flows
-- 💰 Automated treasury operations
-- 🛠️ Merchant AI copilots
+- 🤖 Reliable rule-based monitoring (3 agents)
+- 🧠 Optional AI-powered optimization (1 agent)
+- 📈 Self-optimizing settlement strategies  
+- 🎯 Intelligent risk management
+- ⚡ AI-powered user guidance (when enabled)
+- 💰 Automated cost optimization
+- 🛠️ Professional vault management tools
 
-### Cronos becomes a platform where apps can:
-- Guide users
-- Protect users
-- Automate complex decisions
-- Optimize financial flows
+### The platform shows how Cronos can support:
+- **Hybrid intelligence** - deterministic reliability + optional AI enhancement
+- **Fail-safe design** - works with or without AI
+- **Professional DeFi experiences** with intelligent recommendations
 
-> All powered by intelligent, governed AI living inside the ecosystem.
+> All powered by hybrid agents that combine deterministic safety with optional AI intelligence.
 
 ---
 
 ## One-Sentence Summary
 
-The **Crypto.com AI Agent SDK** lets you embed intelligent, policy-controlled automation into any Cronos dApp so the app can monitor blockchain activity, reason about it, and safely take actions—improving UX, efficiency, and operational reliability.Go
+The **SENTINEL Cronos AI Vault Platform** is a production-ready vault management system with 4 hybrid agents (3 deterministic + 1 AI-enhanced) that monitor risk, optimize settlements, and provide intelligent recommendations—all while maintaining complete user control and transparency on Cronos EVM.
+
+## Technical Architecture
+
+```
+Frontend (Next.js) → Agent Service (Express) → SimpleVault.sol (Cronos)
+     :3001                :3000                  On-Chain
+```
+
+**AI Configuration**: Set `ENABLE_AI_AGENTS=true` + `OPENAI_API_KEY` to enable AI mode for Portfolio Rebalancer
+**Live Demo**: Connect MetaMask → Cronos Testnet → Interact with real vault
+**Contract**: `0xe30093CF82Cb6bc4176a2e1F60B66DFb02811E8a`
+**Repository**: Complete source code with deployment scripts

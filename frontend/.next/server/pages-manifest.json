@@ -1,8 +1,1 @@
-{
-  "/_app": "pages/_app.js",
-  "/_error": "pages/_error.js",
-  "/_document": "pages/_document.js",
-  "/": "pages/index.js",
-  "/settlements": "pages/settlements.js",
-  "/agents": "pages/agents.js"
-}
+{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/agents/[agentId]":"pages/agents/[agentId].html","/agents":"pages/agents.html","/":"pages/index.html","/settlements":"pages/settlements.html","/404":"pages/404.html"}
