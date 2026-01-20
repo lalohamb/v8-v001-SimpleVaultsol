@@ -21,4 +21,4 @@ WORKDIR /app
 
 EXPOSE 3001
 
-CMD ["sh", "-c", "cd /app/agent-service && npm start & cd /app/frontend && npm start"]
+CMD node /app/agent-service/dist/server.js & cd /app/frontend && npm start
