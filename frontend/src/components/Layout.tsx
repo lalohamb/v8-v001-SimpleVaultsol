@@ -11,7 +11,7 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="navbar">
         <div className="nav-container">
           <Link href="/" className="nav-logo">
-            Cronos AI Platform
+            Sentinal AI Platform
           </Link>
           <div className="nav-links">
             <Link href="/">Dashboard</Link>
@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
       </nav>
       <main className="main-content">{children}</main>
       <footer className="footer">
-        <p>Cronos AI Platform - Agent-Powered Vault Management</p>
+        <p>Deterministic & AI-Powered Agents for Vault Management  -Built for the Cronos Blockchain</p>
       </footer>
     </div>
   );
