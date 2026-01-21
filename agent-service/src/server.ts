@@ -11,10 +11,12 @@ import { startVaultEventListener } from "./listeners/vaultEvents.js";
 
 const app = express();
 
-// Enable CORS for frontends (running on ports 3001 and 3002)
+// Enable CORS for frontends
 const allowedOrigins = [
   process.env.FRONTEND_URL || "http://localhost:3001",
-  "http://localhost:3002"
+  "http://localhost:3002",
+  "http://simplevault.165.22.233.86.sslip.io",
+  "http://o08ko0kc4sgckcgsc0888gsg.165.22.233.86.sslip.io"
 ];
 
 app.use(cors({
