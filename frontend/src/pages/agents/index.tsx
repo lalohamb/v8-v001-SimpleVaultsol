@@ -70,9 +70,9 @@ export default function AgentsIndexPage() {
       <div className="agents-index-page">
         <div className="page-header">
           <div>
-            <h1>AI Agent Library</h1>
+            <h1>Deterministic / AI Agent Library</h1>
             <p className="subtitle">
-              Explore and execute specialized AI agents for vault management
+              Explore and execute specialized AI agents for "SimpleVault" management
             </p>
           </div>
           <WalletConnect onAccountChange={setConnectedAccount} />

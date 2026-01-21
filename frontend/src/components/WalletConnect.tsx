@@ -115,7 +115,7 @@ export default function WalletConnect({ onAccountChange }: WalletConnectProps) {
     return (
       <div className="wallet-connect">
         <div className="wallet-error">
-          <p>MetaMask is not installed</p>
+          <p>MetaMask/Cronos wallet is not installed</p>
           <a
             href="https://metamask.io/download/"
             target="_blank"

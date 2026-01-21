@@ -11,7 +11,7 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="navbar">
         <div className="nav-container">
           <Link href="/" className="nav-logo">
-            Sentinal AI Platform
+            Sentinal Platform
           </Link>
           <div className="nav-links">
             <Link href="/">Dashboard</Link>
