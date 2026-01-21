@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
 import WalletConnect from "../components/WalletConnect";
 import VaultInteraction from "../components/VaultInteraction";
+import WelcomeModal from "../components/WelcomeModal";
 import { listAgents, checkHealth } from "../lib/api";
 import type { AgentInfo } from "../types/api";
 
@@ -12,6 +13,19 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
+  const [showWelcome, setShowWelcome] = useState(false);
+
+  useEffect(() => {
+    const hasSeenWelcome = localStorage.getItem("hasSeenWelcome");
+    if (!hasSeenWelcome) {
+      setShowWelcome(true);
+    }
+  }, []);
+
+  const handleCloseWelcome = () => {
+    localStorage.setItem("hasSeenWelcome", "true");
+    setShowWelcome(false);
+  };
 
   useEffect(() => {
     async function loadData() {
@@ -40,6 +54,7 @@ export default function Home() {
 
   return (
     <Layout>
+      {showWelcome && <WelcomeModal onClose={handleCloseWelcome} />}
       <div className="dashboard">
         <div className="dashboard-header">
           <div>
