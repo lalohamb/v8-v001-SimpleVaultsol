@@ -55,7 +55,11 @@ export default function DecisionResult({ result }: DecisionResultProps) {
         </div>
         <div className="result-row">
           <span className="label">Safety Adjustments:</span>
-          <span className="value">{result.decision.clampNotes}</span>
+          <div className="value safety-notes">
+            {result.decision.clampNotes.split(' • ').map((note, i) => (
+              <div key={i} className="safety-note-item">• {note}</div>
+            ))}
+          </div>
         </div>
         <p className="help-text">The final limit may be adjusted by safety rules (clamping) to protect your vault.</p>
       </div>

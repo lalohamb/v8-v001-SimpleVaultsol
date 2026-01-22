@@ -376,6 +376,18 @@ h4 {
   line-height: 1.4;
 }
 
+.safety-notes {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.safety-note-item {
+  font-size: 0.9rem;
+  color: var(--text-color);
+  line-height: 1.5;
+}
+
 .result-row {
   display: flex;
   justify-content: space-between;

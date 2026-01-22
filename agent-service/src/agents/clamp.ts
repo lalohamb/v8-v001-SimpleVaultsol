@@ -24,9 +24,13 @@ export function clampLimit(args: {
   // Convert to human-readable CRO values
   const toEther = (wei: bigint) => (Number(wei) / 1e18).toFixed(4);
   
-  const notes =
-    `Balance: ${toEther(balanceWei)} CRO | Proposed: ${toEther(proposedLimitWei)} CRO | Final: ${toEther(finalWei)} CRO | Max ${maxPct}%: ${toEther(pctCap)} CRO` +
-    (maxAbsWei != null ? ` | Absolute Cap: ${toEther(maxAbsWei)} CRO` : "");
+  const notes = [
+    `Vault Balance: ${toEther(balanceWei)} CRO`,
+    `Agent Proposed: ${toEther(proposedLimitWei)} CRO`,
+    `Final Approved: ${toEther(finalWei)} CRO`,
+    `Max Allowed (${maxPct}%): ${toEther(pctCap)} CRO`,
+    maxAbsWei != null ? `Absolute Cap: ${toEther(maxAbsWei)} CRO` : null
+  ].filter(Boolean).join(' • ');
 
   return { finalWei, notes };
 }
