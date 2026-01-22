@@ -361,6 +361,21 @@ h4 {
   border-bottom: none;
 }
 
+.section-description {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin: 0.5rem 0 1rem 0;
+  line-height: 1.5;
+}
+
+.help-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin: 1rem 0 0 0;
+  font-style: italic;
+  line-height: 1.4;
+}
+
 .result-row {
   display: flex;
   justify-content: space-between;

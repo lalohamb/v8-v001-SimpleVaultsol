@@ -39,29 +39,32 @@ export default function DecisionResult({ result }: DecisionResultProps) {
       </div>
 
       <div className="result-section">
-        <h4>Limits</h4>
+        <h4>Withdrawal Limits</h4>
+        <p className="section-description">The agent recommends safe withdrawal limits based on your vault balance and risk factors.</p>
         <div className="result-row">
-          <span className="label">Proposed Limit:</span>
+          <span className="label">Agent Proposed Limit:</span>
           <span className="value">
             {weiToEther(result.decision.proposedLimitWei)} CRO
           </span>
         </div>
         <div className="result-row">
-          <span className="label">Final Limit (after clamp):</span>
+          <span className="label">Final Approved Limit:</span>
           <span className="value">
             {weiToEther(result.decision.finalLimitWei)} CRO
           </span>
         </div>
         <div className="result-row">
-          <span className="label">Clamp Notes:</span>
+          <span className="label">Safety Adjustments:</span>
           <span className="value">{result.decision.clampNotes}</span>
         </div>
+        <p className="help-text">The final limit may be adjusted by safety rules (clamping) to protect your vault.</p>
       </div>
 
       <div className="result-section">
-        <h4>On-Chain</h4>
+        <h4>Blockchain Transaction</h4>
+        <p className="section-description">This decision has been recorded on the Cronos blockchain for transparency and auditability.</p>
         <div className="result-row">
-          <span className="label">Transaction:</span>
+          <span className="label">Transaction Hash:</span>
           <a
             href={getCronosTestnetExplorerUrl(result.onChain.txHash)}
             target="_blank"
@@ -72,15 +75,16 @@ export default function DecisionResult({ result }: DecisionResultProps) {
           </a>
         </div>
         <div className="result-row">
-          <span className="label">Previous Balance:</span>
+          <span className="label">Your Vault Balance:</span>
           <span className="value">{weiToEther(result.state.balanceWei)} CRO</span>
         </div>
         <div className="result-row">
-          <span className="label">Previous Limit:</span>
+          <span className="label">Previous Recommended Limit:</span>
           <span className="value">
             {weiToEther(result.state.previousRecommendedWei)} CRO
           </span>
         </div>
+        <p className="help-text">Click the transaction hash to view full details on the Cronos explorer.</p>
       </div>
     </div>
   );
