@@ -77,7 +77,7 @@ export default function Home() {
           <div className="status-card">
             <h3>AI Mode</h3>
             <div className={`status-indicator ${aiEnabled ? "ok" : "warning"}`}>
-              {aiEnabled ? "✓ Enabled" : "⚠ Fallback Only"}
+              {aiEnabled ? "✓ ENABLED" : "⚠ Fallback Only"}
             </div>
           </div>
 
