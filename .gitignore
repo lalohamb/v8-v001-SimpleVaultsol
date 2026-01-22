@@ -3,8 +3,6 @@
 .env.*
 !.env.example
 !.env.sample
-!.envsample02
-!.envsample*
 
 # Dependencies
 node_modules/
