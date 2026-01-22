@@ -3,6 +3,7 @@ import Layout from "../components/Layout";
 import WalletConnect from "../components/WalletConnect";
 import VaultInteraction from "../components/VaultInteraction";
 import WelcomeModal from "../components/WelcomeModal";
+import StatusModal from "../components/StatusModal";
 import { listAgents, checkHealth } from "../lib/api";
 import type { AgentInfo } from "../types/api";
 
@@ -14,6 +15,7 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
+  const [showStatus, setShowStatus] = useState(false);
 
   useEffect(() => {
     const hasSeenWelcome = localStorage.getItem("hasSeenWelcome");
@@ -55,6 +57,7 @@ export default function Home() {
   return (
     <Layout>
       {showWelcome && <WelcomeModal onClose={handleCloseWelcome} />}
+      {showStatus && <StatusModal isOpen={showStatus} onClose={() => setShowStatus(false)} />}
       <div className="dashboard">
         <div className="dashboard-header">
           <div>
@@ -67,7 +70,7 @@ export default function Home() {
         </div>
 
         <div className="status-cards">
-          <div className="status-card">
+          <div className="status-card" onClick={() => setShowStatus(true)} style={{ cursor: 'pointer' }}>
             <h3>Service Status</h3>
             <div className={`status-indicator ${healthStatus}`}>
               {healthStatus === "ok" ? "✓ Online" : "✗ Offline"}

@@ -125,7 +125,8 @@ export default function WalletConnect({ onAccountChange }: WalletConnectProps) {
         <div className="wallet-error">
           <p>Cronos wallet is not installed</p>
           <a
-            href="https://chromewebstore.google.com/detail/cronos-wallet/bhhhlbepdkbapadjdnnojkbgioiodbic"
+            //href="https://chromewebstore.google.com/detail/cronos-wallet/bhhhlbepdkbapadjdnnojkbgioiodbic"
+            href="https://chromewebstore.google.com/detail/cryptocom-onchain-extensi/hifafgmccdpekplomjjkcfgodnhcellj"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary"
