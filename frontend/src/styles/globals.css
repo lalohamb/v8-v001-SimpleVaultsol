@@ -91,9 +91,194 @@ a:hover {
 .footer {
   background: var(--card-bg);
   border-top: 1px solid var(--border-color);
-  padding: 2rem;
-  text-align: center;
+  padding: 3rem 2rem 1rem;
   color: var(--text-secondary);
+}
+
+.footer-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.footer-section h4 {
+  color: var(--text-color);
+  margin-bottom: 1rem;
+  font-size: 1rem;
+}
+
+.footer-section p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.footer-section a {
+  display: block;
+  margin: 0.5rem 0;
+  color: var(--text-secondary);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+}
+
+.footer-section a:hover {
+  color: var(--primary-color);
+}
+
+.contract-address {
+  font-family: monospace;
+  font-size: 0.75rem;
+  word-break: break-all;
+  background: var(--bg-color);
+  padding: 0.5rem;
+  border-radius: 4px;
+}
+
+.footer-note {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+}
+
+.footer-bottom {
+  text-align: center;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border-color);
+  font-size: 0.85rem;
+}
+
+.footer-bottom p {
+  margin: 0;
+}
+
+/* FAQ Page */
+.faq-container {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  background: var(--card-bg);
+  padding: 1.5rem;
+  margin-bottom: 1rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.faq-question {
+  color: var(--primary-color);
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+}
+
+.faq-answer {
+  color: var(--text-color);
+  line-height: 1.6;
+  margin: 0;
+}
+
+.faq-footer {
+  text-align: center;
+  margin-top: 3rem;
+  padding: 2rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+}
+
+.faq-footer h3 {
+  margin: 0 0 1rem 0;
+}
+
+.faq-footer a {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+/* About Page */
+.about-container {
+  max-width: 900px;
+  margin: 0 auto;
+}
+
+.about-section {
+  background: var(--card-bg);
+  padding: 2rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+}
+
+.about-section h2 {
+  margin: 0 0 1rem 0;
+  color: var(--primary-color);
+}
+
+.about-section p {
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.about-section ul,
+.about-section ol {
+  line-height: 1.8;
+  margin-left: 1.5rem;
+}
+
+.about-section li {
+  margin-bottom: 0.5rem;
+}
+
+.agents-grid-about {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.agent-card-about {
+  background: var(--bg-color);
+  padding: 1rem;
+  border-radius: 6px;
+  border-left: 3px solid var(--primary-color);
+}
+
+.agent-card-about h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+}
+
+.agent-card-about p {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.contract-info {
+  background: var(--bg-color);
+  padding: 1rem;
+  border-radius: 6px;
+}
+
+.contract-info div {
+  margin-bottom: 1rem;
+}
+
+.contract-info div:last-child {
+  margin-bottom: 0;
+}
+
+.contract-info code {
+  display: block;
+  font-family: monospace;
+  font-size: 0.85rem;
+  background: var(--card-bg);
+  padding: 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+  word-break: break-all;
 }
 
 /* Typography */

@@ -1,1 +1,1 @@
-{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/agents/[agentId]":"pages/agents/[agentId].html","/agents":"pages/agents.html","/":"pages/index.html","/settlements":"pages/settlements.html","/404":"pages/404.html"}
+{"/_app":"pages/_app.js","/_error":"pages/_error.js","/_document":"pages/_document.js","/about":"pages/about.html","/agents/[agentId]":"pages/agents/[agentId].html","/agents":"pages/agents.html","/faq":"pages/faq.html","/":"pages/index.html","/settlements":"pages/settlements.html","/404":"pages/404.html"}
