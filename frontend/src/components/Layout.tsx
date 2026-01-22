@@ -17,7 +17,6 @@ export default function Layout({ children }: LayoutProps) {
             <Link href="/">Dashboard</Link>
             <Link href="/agents">Agent Console</Link>
             <Link href="/settlements">Settlements</Link>
-            <Link href="/history">History</Link>
           </div>
         </div>
       </nav>
