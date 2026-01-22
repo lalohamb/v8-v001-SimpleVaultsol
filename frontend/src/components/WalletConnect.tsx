@@ -63,6 +63,14 @@ export default function WalletConnect({ onAccountChange }: WalletConnectProps) {
     };
   }, [onAccountChange]);
 
+  async function handleDisconnect() {
+    setAccount(null);
+    setChainId(null);
+    if (onAccountChange) {
+      onAccountChange(null);
+    }
+  }
+
   async function handleConnect() {
     try {
       setConnecting(true);
@@ -115,14 +123,14 @@ export default function WalletConnect({ onAccountChange }: WalletConnectProps) {
     return (
       <div className="wallet-connect">
         <div className="wallet-error">
-          <p>MetaMask/Cronos wallet is not installed</p>
+          <p>Cronos wallet is not installed</p>
           <a
-            href="https://metamask.io/download/"
+            href="https://cronos.org/wallet"
             target="_blank"
             rel="noopener noreferrer"
             className="btn-secondary"
           >
-            Install MetaMask
+            Install Cronos Wallet
           </a>
         </div>
       </div>
@@ -161,6 +169,9 @@ export default function WalletConnect({ onAccountChange }: WalletConnectProps) {
             <span>Cronos Testnet</span>
           </div>
         )}
+        <button onClick={handleDisconnect} className="btn-secondary" style={{ marginTop: '0.5rem' }}>
+          Disconnect
+        </button>
       </div>
       {error && <div className="error-text">{error}</div>}
     </div>
