@@ -14,12 +14,29 @@ export default function StatusModal({ isOpen, onClose }: StatusModalProps) {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    async function loadStatus() {
+      try {
+        setLoading(true);
+        const [health, agentData] = await Promise.all([
+          checkHealth(),
+          listAgents()
+        ]);
+        setHealthStatus(health.status);
+        setAgents(agentData.agents);
+        setAiEnabled(agentData.aiEnabled);
+      } catch (error) {
+        setHealthStatus("error");
+      } finally {
+        setLoading(false);
+      }
+    }
+
     if (isOpen) {
       loadStatus();
     }
   }, [isOpen]);
 
-  async function loadStatus() {
+  async function handleRefresh() {
     try {
       setLoading(true);
       const [health, agentData] = await Promise.all([
@@ -122,7 +139,7 @@ export default function StatusModal({ isOpen, onClose }: StatusModalProps) {
         </div>
 
         <div className="modal-footer">
-          <button onClick={loadStatus} className="btn-secondary" disabled={loading}>
+          <button onClick={handleRefresh} className="btn-secondary" disabled={loading}>
             {loading ? "Refreshing..." : "Refresh Status"}
           </button>
           <button onClick={onClose} className="btn-primary">Close</button>

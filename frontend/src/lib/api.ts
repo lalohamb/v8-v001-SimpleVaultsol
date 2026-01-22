@@ -40,7 +40,7 @@ export async function applyAgent(
         throw new Error("Invalid request. Please check all required fields.");
       }
       if (error.response?.status === 500) {
-        throw new Error("Server error. Please check if you have funds in your vault.");
+        throw new Error("Server error. The agent service may be experiencing issues. Please try again later.");
       }
     }
     throw new Error("Failed to apply agent. Please try again.");

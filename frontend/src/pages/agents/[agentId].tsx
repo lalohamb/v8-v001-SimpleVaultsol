@@ -373,6 +373,11 @@ export default function AgentDetailPage() {
 
               {result && (
                 <div className="result-section">
+                  {result.state?.balanceWei === "0" && (
+                    <div className="error-banner" style={{ background: '#fff3cd', border: '1px solid #ffc107', color: '#856404' }}>
+                      <strong>Note:</strong> Your vault balance is 0. Deposit TCRO into the vault to get meaningful recommendations.
+                    </div>
+                  )}
                   <DecisionResult result={result} />
                 </div>
               )}
