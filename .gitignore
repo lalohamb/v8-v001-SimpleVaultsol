@@ -49,3 +49,6 @@ zz*.md
 
 # packagae-lock.json
 package-lock.json
+
+# ignor docs
+/ignore_docs/
