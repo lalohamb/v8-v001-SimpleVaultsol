@@ -3,6 +3,8 @@
 .env.*
 !.env.example
 !.env.sample
+!.envsample02
+!.envsample*
 
 # Dependencies
 node_modules/
@@ -48,5 +50,5 @@ zz*.md
 # packagae-lock.json
 package-lock.json
 
-# ignor docs
+# Remove directory ignore_docs
 /ignore_docs/
