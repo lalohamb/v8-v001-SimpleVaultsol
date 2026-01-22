@@ -20,7 +20,7 @@ export default function DecisionResult({ result }: DecisionResultProps) {
       <div className="result-header">
         <h3>Agent Decision</h3>
         <span className={`mode-badge ${result.mode}`}>
-          {result.mode === "ai" ? "AI Mode" : "Fallback Mode"}
+          {result.mode === "ai" ? "🤖 AI-Powered" : "⚙️ Rule-Based (Fallback)"}
         </span>
       </div>
 

@@ -22,11 +22,13 @@ export const settlementBatchOptimizer: Agent = {
     // propose: cover requested amount if small; otherwise baseline
     const proposed = req > 0n ? (req < baseline ? req : baseline) : baseline;
 
+    const reqCRO = Number(req) / 1e18;
+    
     return {
       proposedLimitWei: proposed,
       reason:
         req > 0n
-          ? `x402 settlement guardrail job=${ctx.jobId ?? "n/a"} reqWei=${req}`
+          ? `x402 settlement guardrail job=${ctx.jobId ?? "n/a"} | Requested: ${reqCRO.toFixed(4)} CRO (${req} wei)`
           : `x402 settlement guardrail job=${ctx.jobId ?? "n/a"}`,
       confidence: 0.75
     };

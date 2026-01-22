@@ -22,7 +22,7 @@ export default function Layout({ children }: LayoutProps) {
       </nav>
       <main className="main-content">{children}</main>
       <footer className="footer">
-        <p>Deterministic & AI-Powered Agents for Vault Management  -Built for the Cronos Blockchain</p>
+        <p>AI-Powered & Deterministic Agents for Cronos Blockchain Vault Management</p>
       </footer>
     </div>
   );

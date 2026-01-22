@@ -21,9 +21,12 @@ export function clampLimit(args: {
   // avoid 0 when balance > 0
   if (balanceWei > 0n && finalWei === 0n) finalWei = 1n;
 
+  // Convert to human-readable CRO values
+  const toEther = (wei: bigint) => (Number(wei) / 1e18).toFixed(4);
+  
   const notes =
-    `balance=${balanceWei} proposed=${proposedLimitWei} final=${finalWei} pctCap=${pctCap}` +
-    (maxAbsWei != null ? ` absCap=${maxAbsWei}` : "");
+    `Balance: ${toEther(balanceWei)} CRO | Proposed: ${toEther(proposedLimitWei)} CRO | Final: ${toEther(finalWei)} CRO | Max ${maxPct}%: ${toEther(pctCap)} CRO` +
+    (maxAbsWei != null ? ` | Absolute Cap: ${toEther(maxAbsWei)} CRO` : "");
 
   return { finalWei, notes };
 }
