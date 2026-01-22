@@ -102,11 +102,11 @@ export function AgentsPage() {
             variant="outline"
             className={
               aiEnabled
-                ? 'bg-cyan-950 text-cyan-400 border-cyan-800'
+                ? 'bg-green-950 text-green-400 border-green-800'
                 : 'bg-slate-700 text-slate-400 border-slate-600'
             }
           >
-            {aiEnabled ? 'ON' : 'OFF'}
+            {aiEnabled ? 'ENABLED ✓' : 'OFF'}
           </Badge>
         </div>
       </div>

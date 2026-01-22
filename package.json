@@ -1,0 +1,9 @@
+{
+  "name": "cronos-sentinel-ai-vault",
+  "version": "3.0.1",
+  "private": true,
+  "scripts": {
+    "clean": "find . -name '.next' -type d -prune -exec rm -rf {} \\; && find . -name 'dist' -type d -prune -exec rm -rf {} \\; && find . -name 'node_modules' -type d -prune -exec rm -rf {} \\; && echo 'Cleaned all build artifacts'",
+    "install:all": "cd agent-service && npm install && cd ../frontend && npm install && cd ../frontend-cronos-sentinal && npm install && cd ../contracts && npm install"
+  }
+}
