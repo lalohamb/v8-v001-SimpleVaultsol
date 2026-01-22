@@ -32,10 +32,18 @@ export async function applyAgent(
     const response = await api.post<AgentApplyResponse>("/agents/apply", request);
     return response.data;
   } catch (error) {
-    if (axios.isAxiosError(error) && error.response?.data) {
-      throw new Error(error.response.data.error || "Failed to apply agent");
+    if (axios.isAxiosError(error)) {
+      if (error.response?.data?.error) {
+        throw new Error(error.response.data.error);
+      }
+      if (error.response?.status === 400) {
+        throw new Error("Invalid request. Please check all required fields.");
+      }
+      if (error.response?.status === 500) {
+        throw new Error("Server error. Please check if you have funds in your vault.");
+      }
     }
-    throw error;
+    throw new Error("Failed to apply agent. Please try again.");
   }
 }
 
