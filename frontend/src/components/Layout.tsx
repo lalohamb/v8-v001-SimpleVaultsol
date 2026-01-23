@@ -66,7 +66,7 @@ export default function Layout({ children }: LayoutProps) {
           </div>
         </div>
         <div className="footer-bottom">
-          <p>&copy; 2026 © Sentinel SimpleVault. Built for Cronos Hackathon.</p>
+          <p>2026 © Sentinel SimpleVault. Built for Cronos Hackathon.</p>
         </div>
       </footer>
     </div>
