@@ -36,13 +36,14 @@ export default function Layout({ children }: LayoutProps) {
             <Link href="/">Dashboard</Link>
             <Link href="/agents">Agents</Link>
             <Link href="/about">About</Link>
-            <Link href="/faq">FAQ</Link>
+            
           </div>
           <div className="footer-section">
             <h4>Resources</h4>
             <a href="https://cronos.org" target="_blank" rel="noopener noreferrer">Cronos Network</a>
             <a href="https://explorer.cronos.org/testnet" target="_blank" rel="noopener noreferrer">Block Explorer</a>
-            <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
+            <Link href="/faq">FAQ</Link>
+            
           </div>
           <div className="footer-section">
             <h4>Contracts (Testnet)</h4>

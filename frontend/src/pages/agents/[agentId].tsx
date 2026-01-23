@@ -110,7 +110,7 @@ const AGENT_METADATA: Record<AgentId, {
       "Anomaly detection response",
       "Crisis management"
     ],
-    logic: "Severe risk (not NONE): 10% of balance (confidence: 0.85). Normal: 25% of balance (confidence: 0.6)"
+    logic: "This agent operates in two distinct modes based on risk assessment:\n\n🚨 EMERGENCY MODE (Risk Trigger: LOW/MEDIUM/HIGH/CRITICAL):\n• Proposed Limit: 10% of vault balance\n• Confidence: 85%\n• Rationale: When any risk trigger is detected, the agent immediately clamps withdrawal limits to 10% to protect vault assets from potential threats. This aggressive restriction ensures maximum capital preservation during crisis conditions.\n\n✅ NORMAL MODE (Risk Trigger: NONE):\n• Proposed Limit: 25% of vault balance\n• Confidence: 60%\n• Rationale: Under normal conditions with no detected risks, the agent applies a precautionary 25% limit as a baseline safety measure.\n\nThe agent evaluates the riskTrigger parameter and automatically selects the appropriate protection level, prioritizing vault security over withdrawal flexibility during uncertain conditions."
   },
   "settlement-batch-optimizer": {
     name: "Settlement Batch Optimizer",
