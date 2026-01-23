@@ -153,6 +153,12 @@ export default function SettlementPaymentForm({
             </a>
           </p>
         )}
+        <div className="payment-warning">
+          <strong>⚠️ IMPORTANT: Save Your Job ID</strong>
+          <p>Your Job ID is: <code className="job-id-highlight">{jobId}</code></p>
+          <p>You'll need this exact Job ID to complete Step 2. Payment is stored on-chain and can be used later, even in a new browser session.</p>
+          <p><strong>Payment Policy:</strong> This is a "pay-per-use" model where payment guarantees one execution slot but doesn't force execution. The 1.0 TCRO fee is a non-refundable reservation fee.</p>
+        </div>
       </div>
     );
   }
@@ -161,6 +167,9 @@ export default function SettlementPaymentForm({
     <div className="settlement-payment-form">
       <div className="payment-info">
         <h4>Payment Required</h4>
+        <div className="payment-notice">
+          <p><strong>⚠️ Non-Refundable:</strong> Payment is final once confirmed. This is a "pay-per-use" reservation fee that guarantees one execution slot.</p>
+        </div>
         {fee && (
           <div className="fee-display">
             <span className="fee-label">Settlement Fee:</span>

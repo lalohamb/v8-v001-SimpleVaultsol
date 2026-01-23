@@ -2330,6 +2330,58 @@ h4 {
   text-align: center;
 }
 
+.payment-warning {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 8px;
+  text-align: left;
+  color: var(--text-color);
+  border-left: 4px solid #ffc107;
+}
+
+.payment-warning strong {
+  display: block;
+  color: #f59e0b;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.payment-warning p {
+  margin: 0.5rem 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.job-id-highlight {
+  background: #fef3c7;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-family: 'Courier New', monospace;
+  color: #92400e;
+  font-weight: 700;
+  font-size: 1.1em;
+}
+
+.payment-notice {
+  margin-bottom: 1rem;
+  padding: 0.75rem;
+  background: rgba(255, 243, 205, 0.3);
+  border-left: 3px solid #ffc107;
+  border-radius: 4px;
+}
+
+.payment-notice p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: #856404;
+  line-height: 1.4;
+}
+
+.payment-notice strong {
+  color: #92400e;
+}
+
 .success-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
