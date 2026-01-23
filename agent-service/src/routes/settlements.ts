@@ -3,7 +3,7 @@ import { getAgent, hasAgent, listAgents } from "../agents/registry.js";
 import type { AgentContext } from "../agents/types.js";
 import { clampLimit, sanitizeReason } from "../agents/clamp.js";
 import { getSimpleVaultReadonly, getSimpleVaultWithSigner } from "../contracts/simpleVault.js";
-import { checkJobPayment, isJobAvailable, markJobExecuted, getSettlementFee, getPaymentRecipient } from "../contracts/settlementPayment.js";
+import { checkJobPayment, getSettlementFee, getPaymentRecipient } from "../contracts/settlementPayment.js";
 import { ethers } from "ethers";
 
 const router = Router();
@@ -89,40 +89,29 @@ router.post("/run", async (req, res) => {
     const user = mustString(req.body?.user, "user");
     const agentIdRaw = mustString(req.body?.agentId, "agentId");
 
-    // x402 gate - verify job is paid AND not yet executed (use-once enforcement)
-    const available = await isJobAvailable(jobId);
+    // x402 gate - verify job is paid
+    const payment = await checkJobPayment(jobId);
 
-    if (!available) {
-      const payment = await checkJobPayment(jobId);
-      
-      if (!payment.isPaid) {
-        const fee = await getSettlementFee();
-        const recipient = await getPaymentRecipient();
-        const contractAddress = process.env.SETTLEMENT_PAYMENT_ADDRESS;
+    if (!payment.isPaid) {
+      const fee = await getSettlementFee();
+      const recipient = await getPaymentRecipient();
+      const contractAddress = process.env.SETTLEMENT_PAYMENT_ADDRESS;
 
-        return res.status(402).json({
-          error: "Payment Required",
-          x402: {
-            jobId,
-            contractAddress,
-            amount: ethers.formatEther(fee),
-            amountWei: fee.toString(),
-            asset: "TCRO",
-            chain: "Cronos Testnet",
-            chainId: 338,
-            recipient,
-            memo: `x402 settlement job ${jobId}`,
-            instructions: "Call payForSettlement(jobId) on the SettlementPayment contract with the fee amount"
-          }
-        });
-      } else {
-        return res.status(409).json({
-          status: "already_executed",
-          reason: "JOB_ALREADY_CONSUMED",
+      return res.status(402).json({
+        error: "Payment Required",
+        x402: {
           jobId,
-          guidance: "This Job ID has already been used. Each payment allows only one execution. Use a different Job ID for a new settlement."
-        });
-      }
+          contractAddress,
+          amount: ethers.formatEther(fee),
+          amountWei: fee.toString(),
+          asset: "TCRO",
+          chain: "Cronos Testnet",
+          chainId: 338,
+          recipient,
+          memo: `x402 settlement job ${jobId}`,
+          instructions: "Call payForSettlement(jobId) on the SettlementPayment contract with the fee amount"
+        }
+      });
     }
 
     // Validate agentId (clean UX)
@@ -193,8 +182,6 @@ router.post("/run", async (req, res) => {
 
     const tx = await vault.agentSetWithdrawLimit(user, finalWei, finalReason);
     await tx.wait();
-
-    await markJobExecuted(jobId, agentKey);
 
     // Execute “pipeline” (demo)
     const pipeline = ["validate balances", "calculate fees", "route payouts", "finalize settlement"];
