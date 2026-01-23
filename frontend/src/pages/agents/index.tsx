@@ -75,7 +75,7 @@ export default function AgentsIndexPage() {
               Explore and execute specialized AI agents for "SimpleVault" management
             </p>
           </div>
-          <WalletConnect onAccountChange={setConnectedAccount} />
+          {/* <WalletConnect onAccountChange={setConnectedAccount} /> */}
         </div>
 
         {error && (
