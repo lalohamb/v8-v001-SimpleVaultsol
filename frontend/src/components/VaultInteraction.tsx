@@ -216,7 +216,18 @@ export default function VaultInteraction({ userAddress: _userAddress }: VaultInt
   if (!userAddress) {
     return (
       <div className="vault-interaction">
-        <p className="empty-state">Connect your wallet to interact with the vault</p>
+        <div className="vault-header">
+          <h2>Your Vault</h2>
+        </div>
+        <div style={{ padding: '2rem', textAlign: 'center' }}>
+          <p style={{ marginBottom: '1rem', color: '#666' }}>Connect your wallet to interact with the vault</p>
+          <a href="#" onClick={(e) => { e.preventDefault(); window.location.reload(); }} className="btn-primary">
+            Connect Wallet
+          </a>
+          <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#999' }}>
+            Make sure you have Cronos Wallet or MetaMask installed and connected to Cronos Testnet
+          </p>
+        </div>
       </div>
     );
   }
