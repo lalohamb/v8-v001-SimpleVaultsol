@@ -56,4 +56,4 @@ package-lock.json
 /wiki/
 /contracts/scripts/
 /contracts/temp_contracts/
-/agent-service/*.md
+/agent-service/src/*.md
