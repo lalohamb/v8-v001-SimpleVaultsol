@@ -147,7 +147,7 @@ export default function SettlementsPage() {
                     <strong>Purpose:</strong> Pay for the settlement service before execution.
                   </p>
                   <p>
-                    <strong>What happens:</strong> You submit a Job ID and pay <strong>1.0 TCRO</strong> via MetaMask.
+                    <strong>What happens:</strong> You submit a Job ID and pay <strong>1.0 TCRO</strong> via your Web3 wallet.
                     The payment is sent to the SettlementPayment smart contract on Cronos Testnet, which marks
                     this Job ID as "paid" on-chain and allows you to proceed to Step 2.
                   </p>
@@ -157,7 +157,7 @@ export default function SettlementsPage() {
                   </p>
                   <div className="step-note">
                     💡 <strong>Note:</strong> This uses real blockchain payments in TCRO. Make sure you have
-                    MetaMask installed and connected to Cronos Testnet with sufficient TCRO balance.
+                    a Web3 wallet (Cronos Wallet, MetaMask, etc.) connected to Cronos Testnet with sufficient TCRO balance.
                   </div>
                 </div>
               </div>

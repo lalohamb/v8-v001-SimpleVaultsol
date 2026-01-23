@@ -55,7 +55,7 @@ export function getSettlementPaymentContract(signerOrProvider?: ethers.Signer | 
   return new ethers.Contract(SETTLEMENT_PAYMENT_ADDRESS, SETTLEMENT_PAYMENT_ABI, provider);
 }
 
-// Check if MetaMask is installed
+// Check if Web3 wallet is installed
 export function isMetaMaskInstalled(): boolean {
   return typeof window !== "undefined" && typeof window.ethereum !== "undefined";
 }
@@ -63,7 +63,7 @@ export function isMetaMaskInstalled(): boolean {
 // Request account access
 export async function connectWallet(): Promise<string> {
   if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("Web3 wallet not detected. Please install Cronos Wallet or MetaMask.");
   }
 
   try {
@@ -79,7 +79,7 @@ export async function connectWallet(): Promise<string> {
 // Switch to Cronos Testnet
 export async function switchToCronosTestnet(): Promise<void> {
   if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("Web3 wallet not detected");
   }
 
   try {
@@ -88,7 +88,7 @@ export async function switchToCronosTestnet(): Promise<void> {
       params: [{ chainId: CRONOS_TESTNET.chainId }],
     });
   } catch (switchError: any) {
-    // This error code indicates that the chain has not been added to MetaMask
+    // This error code indicates that the chain has not been added to wallet
     if (switchError.code === 4902) {
       try {
         await window.ethereum.request({
@@ -96,7 +96,7 @@ export async function switchToCronosTestnet(): Promise<void> {
           params: [CRONOS_TESTNET],
         });
       } catch (addError) {
-        throw new Error("Failed to add Cronos Testnet to MetaMask");
+        throw new Error("Failed to add Cronos Testnet to wallet");
       }
     } else {
       throw new Error("Failed to switch to Cronos Testnet");
@@ -104,10 +104,10 @@ export async function switchToCronosTestnet(): Promise<void> {
   }
 }
 
-// Get signer from MetaMask
+// Get signer from connected wallet
 export async function getSigner(): Promise<ethers.Signer> {
   if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed");
+    throw new Error("Web3 wallet not detected");
   }
 
   const provider = new ethers.BrowserProvider(window.ethereum);

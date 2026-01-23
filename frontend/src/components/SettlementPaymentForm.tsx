@@ -57,31 +57,69 @@ export default function SettlementPaymentForm({
       return;
     }
 
+    // Check if wallet is available
+    if (typeof window === "undefined" || !window.ethereum) {
+      onPaymentError("No Web3 wallet detected. Please install Cronos Wallet or MetaMask.");
+      return;
+    }
+
     try {
       setLoading(true);
+      onPaymentError(""); // Clear previous errors
       
-      // Get signer from MetaMask
+      console.log("Checking wallet connection...");
+      
+      // First, request account access
+      const accounts = await window.ethereum.request({ 
+        method: 'eth_requestAccounts' 
+      });
+      
+      if (!accounts || accounts.length === 0) {
+        throw new Error("No accounts found. Please unlock your wallet.");
+      }
+      
+      console.log("Connected account:", accounts[0]);
+      console.log("Getting signer...");
+      
+      // Get signer from connected wallet
       const signer = await getSigner();
+      console.log("Wallet connected, preparing transaction...");
+      
       const contract = getSettlementPaymentContract(signer);
       
       // Get fee in wei
       const feeWei = await contract.getSettlementFee();
+      console.log("Fee:", ethers.formatEther(feeWei), "TCRO");
       
+      console.log("Sending transaction to wallet for approval...");
       // Call payForSettlement with the fee
       const tx = await contract.payForSettlement(jobId, {
         value: feeWei
       });
       
+      console.log("Transaction submitted:", tx.hash);
       setTxHash(tx.hash);
       
+      console.log("Waiting for confirmation...");
       // Wait for transaction confirmation
-      await tx.wait();
+      const receipt = await tx.wait();
+      console.log("Transaction confirmed in block:", receipt.blockNumber);
       
       setIsPaid(true);
       onPaymentSuccess();
     } catch (error: any) {
       console.error("Payment failed:", error);
-      onPaymentError(error.message || "Payment failed");
+      
+      // Better error messages
+      if (error.code === 4001) {
+        onPaymentError("Transaction rejected by user");
+      } else if (error.code === -32002) {
+        onPaymentError("Please check your wallet - a connection request is pending");
+      } else if (error.message?.includes("insufficient funds")) {
+        onPaymentError("Insufficient TCRO balance for transaction + gas fees");
+      } else {
+        onPaymentError(error.message || "Payment failed");
+      }
     } finally {
       setLoading(false);
     }
@@ -141,8 +179,9 @@ export default function SettlementPaymentForm({
         onClick={handlePayment}
         disabled={loading || !jobId}
         className="btn-primary payment-btn"
+        title={loading ? "Check your wallet for pending approval" : "Click to open wallet and approve payment"}
       >
-        {loading ? "Processing Payment..." : `Pay ${fee || "..."} TCRO`}
+        {loading ? "⏳ Check Your Wallet..." : `Pay ${fee || "..."} TCRO`}
       </button>
 
       {txHash && !isPaid && (
