@@ -1596,12 +1596,13 @@ h4 {
 }
 
 .logic-text {
-  font-family: monospace;
   background: var(--bg-color);
   padding: 1rem;
   border-radius: 4px;
   font-size: 0.875rem;
-  line-height: 1.6;
+  line-height: 1.8;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .use-cases-list {
