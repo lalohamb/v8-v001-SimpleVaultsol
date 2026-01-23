@@ -15,6 +15,12 @@ contract SettlementPayment {
     
     // Track payment amounts: jobId => amount paid
     mapping(bytes32 => uint256) public paymentAmounts;
+    
+    // Track executed jobs: jobId => true if consumed (use-once enforcement)
+    mapping(bytes32 => bool) public executedJobs;
+    
+    // Authorized executors (backend service addresses)
+    mapping(address => bool) public authorizedExecutors;
 
     // --- Events ---
     event SettlementPaid(
@@ -23,9 +29,17 @@ contract SettlementPayment {
         uint256 amount,
         uint256 timestamp
     );
+    
+    event SettlementExecuted(
+        bytes32 indexed jobId,
+        address indexed executor,
+        uint256 timestamp
+    );
 
     event FeeUpdated(uint256 oldFee, uint256 newFee);
     event RecipientUpdated(address indexed oldRecipient, address indexed newRecipient);
+    event ExecutorAuthorized(address indexed executor);
+    event ExecutorRevoked(address indexed executor);
 
     // --- Modifiers ---
     modifier onlyOwner() {
@@ -39,6 +53,7 @@ contract SettlementPayment {
         owner = msg.sender;
         recipient = _recipient;
         settlementFee = _settlementFee;
+        authorizedExecutors[msg.sender] = true; // Owner is authorized by default
     }
 
     // --- Payment Functions ---
@@ -86,6 +101,36 @@ contract SettlementPayment {
         bytes32 jobHash = keccak256(bytes(jobId));
         return paidJobs[jobHash] != address(0);
     }
+    
+    /// @notice Check if a job has been executed (consumed)
+    /// @param jobId The job identifier
+    /// @return True if the job has been executed
+    function isJobExecuted(string calldata jobId) external view returns (bool) {
+        bytes32 jobHash = keccak256(bytes(jobId));
+        return executedJobs[jobHash];
+    }
+    
+    /// @notice Check if a job is available for execution (paid but not executed)
+    /// @param jobId The job identifier
+    /// @return available True if paid and not yet executed
+    function isJobAvailable(string calldata jobId) external view returns (bool available) {
+        bytes32 jobHash = keccak256(bytes(jobId));
+        available = paidJobs[jobHash] != address(0) && !executedJobs[jobHash];
+    }
+    
+    /// @notice Mark a job as executed (use-once enforcement)
+    /// @param jobId The job identifier
+    /// @dev Only authorized executors (backend service) can call this
+    function markJobExecuted(string calldata jobId) external {
+        require(authorizedExecutors[msg.sender], "Not authorized executor");
+        
+        bytes32 jobHash = keccak256(bytes(jobId));
+        require(paidJobs[jobHash] != address(0), "Job not paid");
+        require(!executedJobs[jobHash], "Job already executed");
+        
+        executedJobs[jobHash] = true;
+        emit SettlementExecuted(jobHash, msg.sender, block.timestamp);
+    }
 
     // --- Admin Functions ---
 
@@ -109,6 +154,21 @@ contract SettlementPayment {
     function transferOwnership(address newOwner) external onlyOwner {
         require(newOwner != address(0), "Invalid owner");
         owner = newOwner;
+    }
+    
+    /// @notice Authorize an executor (backend service address)
+    /// @param executor Address to authorize
+    function authorizeExecutor(address executor) external onlyOwner {
+        require(executor != address(0), "Invalid executor");
+        authorizedExecutors[executor] = true;
+        emit ExecutorAuthorized(executor);
+    }
+    
+    /// @notice Revoke executor authorization
+    /// @param executor Address to revoke
+    function revokeExecutor(address executor) external onlyOwner {
+        authorizedExecutors[executor] = false;
+        emit ExecutorRevoked(executor);
     }
 
     // --- View Functions ---

@@ -15,6 +15,7 @@ export default function SettlementsPage() {
   const [loading, setLoading] = useState(false);
   const [result, setResult] = useState<SettlementRunResponse | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [hasExecuted, setHasExecuted] = useState(false);
 
   useEffect(() => {
     async function loadAgents() {
@@ -48,6 +49,11 @@ export default function SettlementsPage() {
       return;
     }
 
+    if (hasExecuted) {
+      setError("Settlement already executed for this Job ID. Use a different Job ID for a new settlement.");
+      return;
+    }
+
     try {
       setLoading(true);
       setError(null);
@@ -65,6 +71,7 @@ export default function SettlementsPage() {
       });
 
       setResult(response);
+      setHasExecuted(true);
     } catch (err: any) {
       if (err.type === "payment_required") {
         setError("Payment required. Please complete Step 1 first.");
@@ -244,6 +251,19 @@ export default function SettlementsPage() {
               <h2>Step 2: Run Settlement</h2>
               <form onSubmit={handleRunSettlement} className="settlement-form">
                 <div className="form-group">
+                  <label htmlFor="step2JobId">Job ID * <span className="field-note">(Must match Step 1)</span></label>
+                  <input
+                    id="step2JobId"
+                    type="text"
+                    value={jobId}
+                    onChange={(e) => setJobId(e.target.value)}
+                    placeholder="job-001"
+                    required
+                  />
+                  <small>Enter the same Job ID you used for payment in Step 1</small>
+                </div>
+
+                <div className="form-group">
                   <label htmlFor="userAddress">User Address *</label>
                   <input
                     id="userAddress"
@@ -283,8 +303,8 @@ export default function SettlementsPage() {
                   />
                 </div>
 
-                <button type="submit" disabled={loading} className="btn-primary">
-                  {loading ? "Executing..." : "Run Settlement"}
+                <button type="submit" disabled={loading || hasExecuted} className="btn-primary">
+                  {loading ? "Executing..." : hasExecuted ? "✓ Settlement Executed" : "Run Settlement"}
                 </button>
               </form>
             </section>

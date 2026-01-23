@@ -1749,6 +1749,13 @@ h4 {
   color: var(--text-secondary);
 }
 
+.field-note {
+  font-size: 0.75rem;
+  color: var(--warning-color);
+  font-weight: 400;
+  font-style: italic;
+}
+
 .btn-large {
   padding: 1rem 2rem;
   font-size: 1.125rem;
