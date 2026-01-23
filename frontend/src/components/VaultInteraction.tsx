@@ -6,6 +6,7 @@ import {
   weiToEther,
   etherToWei,
   SIMPLE_VAULT_ADDRESS,
+  getCurrentAccount,
 } from "../lib/web3";
 import { getCronosTestnetExplorerUrl } from "../lib/api";
 
@@ -25,7 +26,8 @@ interface TransactionDetails {
   status?: 'pending' | 'confirmed' | 'failed';
 }
 
-export default function VaultInteraction({ userAddress }: VaultInteractionProps) {
+export default function VaultInteraction({ userAddress: _userAddress }: VaultInteractionProps) {
+  const [userAddress, setUserAddress] = useState<string | null>(null);
   const [balance, setBalance] = useState<string>("0");
   const [recommendedLimit, setRecommendedLimit] = useState<string>("0");
   const [depositAmount, setDepositAmount] = useState("");
@@ -39,21 +41,42 @@ export default function VaultInteraction({ userAddress }: VaultInteractionProps)
 
   useEffect(() => {
     setMounted(true);
+    detectWallet();
+    
+    // Listen for account changes
+    if (typeof window !== 'undefined' && window.ethereum) {
+      window.ethereum.on('accountsChanged', detectWallet);
+      return () => {
+        window.ethereum.removeListener('accountsChanged', detectWallet);
+      };
+    }
+  }, []);
+
+  async function detectWallet() {
+    const account = await getCurrentAccount();
+    setUserAddress(account);
+    if (account) {
+      loadVaultData(account);
+    }
+  }
+
+  useEffect(() => {
     if (userAddress) {
-      loadVaultData();
+      loadVaultData(userAddress);
     }
   }, [userAddress]);
 
-  async function loadVaultData() {
-    if (!userAddress) return;
+  async function loadVaultData(address?: string) {
+    const addr = address || userAddress;
+    if (!addr) return;
 
     try {
       setRefreshing(true);
       const contract = getVaultContract();
       
       const [userBalance, userLimit] = await Promise.all([
-        contract.balances(userAddress),
-        contract.recommendedWithdrawLimit(userAddress),
+        contract.balances(addr),
+        contract.recommendedWithdrawLimit(addr),
       ]);
 
       setBalance(userBalance.toString());
@@ -202,7 +225,7 @@ export default function VaultInteraction({ userAddress }: VaultInteractionProps)
     <div className="vault-interaction">
       <div className="vault-header">
         <h2>Your Vault</h2>
-        <button onClick={loadVaultData} disabled={refreshing} className="btn-refresh">
+        <button onClick={() => loadVaultData()} disabled={refreshing} className="btn-refresh">
           {refreshing ? "⟳" : "↻"} Refresh
         </button>
       </div>

@@ -11,7 +11,8 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="navbar">
         <div className="nav-container">
           <Link href="/" className="nav-logo">
-            Sentinel SimpleVault Platform
+            <img src="/sentinel_logo.png" alt="Sentinel" className="hero-logo-image" />
+            Sentinel SimpleVault 
           </Link>
           <div className="nav-links">
             <Link href="/">Dashboard</Link>
@@ -24,8 +25,11 @@ export default function Layout({ children }: LayoutProps) {
       <footer className="footer">
         <div className="footer-content">
           <div className="footer-section">
-            <h4>Sentinel SimpleVault</h4>
-            <p>AI-Powered & Deterministic Agents for Cronos Blockchain Vault Management</p>
+            <div className="footer-logo">
+              <img src="/sentinel_logo.png" alt="Sentinel" className="footer-logo-image" />
+              <h4>Sentinel SimpleVault</h4>
+            </div>
+            <p>Deterministic & AI-Powered Agents for vault contract management for the Cronos Blockchain </p>
           </div>
           <div className="footer-section">
             <h4>Quick Links</h4>
@@ -41,9 +45,23 @@ export default function Layout({ children }: LayoutProps) {
             <a href="https://github.com" target="_blank" rel="noopener noreferrer">GitHub</a>
           </div>
           <div className="footer-section">
-            <h4>Contract</h4>
-            <p className="contract-address">0xe30093CF82Cb6bc4176a2e1F60B66DFb02811E8a</p>
-            <p className="footer-note">Cronos Testnet</p>
+            <h4>Contracts (Testnet)</h4>
+            <a 
+              href="https://explorer.cronos.org/testnet/address/0xe30093cf82cb6bc4176a2e1f60b66dfb02811e8a" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="contract-link-compact"
+            >
+              SimpleVault: 0xe30...E8a
+            </a>
+            <a 
+              href="https://explorer.cronos.org/testnet/address/0xf5c2d702a0d483d4be9c00e44f2c753aa54f1db0" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="contract-link-compact"
+            >
+              Settlement: 0xF5C...db0
+            </a>
           </div>
         </div>
         <div className="footer-bottom">

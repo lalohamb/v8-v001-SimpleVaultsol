@@ -62,11 +62,20 @@ a:hover {
   font-size: 1.5rem;
   font-weight: 700;
   color: var(--primary-color);
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.logo-image {
+  height: 40px;
+  width: auto;
 }
 
 .nav-links {
   display: flex;
   gap: 2rem;
+  align-items: center;
 }
 
 .nav-links a {
@@ -91,7 +100,7 @@ a:hover {
 .footer {
   background: var(--card-bg);
   border-top: 1px solid var(--border-color);
-  padding: 3rem 2rem 1rem;
+  padding: 2rem 2rem 0.75rem;
   color: var(--text-secondary);
 }
 
@@ -100,33 +109,90 @@ a:hover {
   margin: 0 auto;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 2rem;
-  margin-bottom: 2rem;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.footer-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-bottom: 0.5rem;
+}
+
+.footer-logo-image {
+  height: 32px;
+  width: auto;
 }
 
 .footer-section h4 {
   color: var(--text-color);
-  margin-bottom: 1rem;
-  font-size: 1rem;
+  margin-bottom: 0.5rem;
+  font-size: 0.95rem;
 }
 
 .footer-section p {
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
-  line-height: 1.5;
+  margin: 0.25rem 0;
+  font-size: 0.85rem;
+  line-height: 1.4;
 }
 
 .footer-section a {
   display: block;
-  margin: 0.5rem 0;
+  margin: 0.25rem 0;
   color: var(--text-secondary);
   text-decoration: none;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   transition: color 0.2s;
 }
 
 .footer-section a:hover {
   color: var(--primary-color);
+}
+
+.contract-item {
+  margin: 0.5rem 0;
+}
+
+.contract-label {
+  display: block;
+  font-size: 0.7rem;
+  color: var(--text-secondary);
+  margin-bottom: 0.15rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-weight: 600;
+}
+
+.contract-link {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  display: inline-block;
+  padding: 0.2rem 0.4rem;
+  background: var(--bg-color);
+  border-radius: 4px;
+  transition: all 0.2s;
+}
+
+.contract-link:hover {
+  background: var(--primary-color);
+  color: white;
+  transform: translateX(2px);
+}
+
+.contract-link-compact {
+  font-family: monospace;
+  font-size: 0.75rem;
+  color: var(--primary-color);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.contract-link-compact:hover {
+  color: var(--text-color);
+  text-decoration: underline;
 }
 
 .contract-address {
@@ -139,15 +205,16 @@ a:hover {
 }
 
 .footer-note {
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   color: var(--text-secondary);
+  margin-top: 0.5rem;
 }
 
 .footer-bottom {
   text-align: center;
-  padding-top: 2rem;
+  padding-top: 1rem;
   border-top: 1px solid var(--border-color);
-  font-size: 0.85rem;
+  font-size: 0.8rem;
 }
 
 .footer-bottom p {
@@ -320,15 +387,26 @@ h4 {
 }
 
 .status-card {
-  background: var(--card-bg);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   padding: 1.5rem;
-  border-radius: 8px;
+  border-radius: 12px;
   box-shadow: var(--shadow);
-  transition: box-shadow 0.2s;
+  transition: all 0.3s;
+  border-left: 4px solid var(--primary-color);
 }
 
 .status-card:hover {
   box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
+}
+
+.status-card h3 {
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-secondary);
+  margin-bottom: 1rem;
+  font-weight: 600;
 }
 
 .status-indicator {
@@ -376,6 +454,18 @@ h4 {
   text-decoration: none;
   color: inherit;
   display: block;
+}
+
+.agents-overview {
+  background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+  padding: 2rem;
+  border-radius: 12px;
+  border: 2px solid #667eea;
+}
+
+.agents-overview h2 {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-color);
 }
 
 .agent-overview-card:hover,
@@ -1267,6 +1357,79 @@ h4 {
 }
 
 /* Dashboard Layout */
+.section-divider {
+  margin: 3rem 0 1.5rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--border-color);
+}
+
+.section-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.75rem;
+  color: var(--text-color);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.section-subtitle {
+  margin: 0;
+  font-size: 1rem;
+  color: var(--text-secondary);
+  font-weight: 400;
+}
+
+.hero-logo {
+  margin-bottom: 1rem;
+}
+
+.hero-logo-image {
+  height: 80px;
+  width: auto;
+}
+
+.hero-features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.hero-feature {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+  padding: 1rem;
+  background: var(--card-bg);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  transition: transform 0.2s;
+}
+
+.hero-feature:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.feature-icon {
+  font-size: 2rem;
+  flex-shrink: 0;
+}
+
+.hero-feature strong {
+  display: block;
+  color: var(--primary-color);
+  margin-bottom: 0.25rem;
+  font-size: 0.95rem;
+}
+
+.hero-feature p {
+  margin: 0;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
 .dashboard-header {
   display: flex;
   justify-content: space-between;

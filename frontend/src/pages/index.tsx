@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../components/Layout";
-import WalletConnect from "../components/WalletConnect";
+
 import VaultInteraction from "../components/VaultInteraction";
 import WelcomeModal from "../components/WelcomeModal";
 import StatusModal from "../components/StatusModal";
@@ -13,7 +13,6 @@ export default function Home() {
   const [healthStatus, setHealthStatus] = useState<string>("checking...");
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
 
@@ -61,12 +60,40 @@ export default function Home() {
       <div className="dashboard">
         <div className="dashboard-header">
           <div>
-            <h1>Cronos AI Vault Platform</h1>
+         
+            
             <p className="subtitle">
-              Agent-powered vault management on Cronos Testnet
+              Secure, AI-powered vault management on Cronos Testnet with intelligent agents that monitor, analyze, and protect your digital assets 24/7.
             </p>
+            <div className="hero-features">
+              <div className="hero-feature">
+                <span className="feature-icon">🤖</span>
+                <div>
+                  <strong>AI & Rule-Based Agents</strong>
+                  <p>Dual-mode protection with OpenAI-powered insights and deterministic fallback logic</p>
+                </div>
+              </div>
+              <div className="hero-feature">
+                <span className="feature-icon">🛡️</span>
+                <div>
+                  <strong>Real-Time Risk Analysis</strong>
+                  <p>Continuous monitoring of withdrawal patterns, velocity checks, and anomaly detection</p>
+                </div>
+              </div>
+              <div className="hero-feature">
+                <span className="feature-icon">⚡</span>
+                <div>
+                  <strong>Automated Settlements</strong>
+                  <p>x402 protocol integration for batch processing and optimized transaction workflows</p>
+                </div>
+              </div>
+            </div>
           </div>
-          <WalletConnect onAccountChange={setConnectedAccount} />
+        </div>
+
+        <div className="section-divider">
+          <h2 className="section-title">📊 System Status</h2>
+          <p className="section-subtitle">Real-time monitoring of platform health and configuration</p>
         </div>
 
         <div className="status-cards">
@@ -96,9 +123,14 @@ export default function Home() {
           </div>
         )}
 
+        <div className="section-divider">
+          <h2 className="section-title">🤖 Active Agents</h2>
+          <p className="section-subtitle">AI-powered and deterministic agents protecting your vault</p>
+        </div>
+
         <div className="main-grid">
           <div className="left-section">
-            <VaultInteraction userAddress={connectedAccount} />
+            <VaultInteraction userAddress={null} />
           </div>
 
           <div className="right-section">
