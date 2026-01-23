@@ -168,6 +168,12 @@ export default function AgentDetailPage() {
   
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [userAddress, setUserAddress] = useState("");
+  const [requestedAmount, setRequestedAmount] = useState("");
+  const [riskTrigger, setRiskTrigger] = useState<RiskTrigger>("NONE");
+  const [jobId, setJobId] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [result, setResult] = useState<AgentApplyResponse | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const agentMetadata = agentId ? AGENT_METADATA[agentId as AgentId] : null;
 
