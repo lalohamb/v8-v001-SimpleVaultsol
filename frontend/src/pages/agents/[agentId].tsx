@@ -168,12 +168,6 @@ export default function AgentDetailPage() {
   
   const [connectedAccount, setConnectedAccount] = useState<string | null>(null);
   const [userAddress, setUserAddress] = useState("");
-  const [requestedAmount, setRequestedAmount] = useState("");
-  const [riskTrigger, setRiskTrigger] = useState<RiskTrigger>("NONE");
-  const [jobId, setJobId] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState<AgentApplyResponse | null>(null);
-  const [error, setError] = useState<string | null>(null);
 
   const agentMetadata = agentId ? AGENT_METADATA[agentId as AgentId] : null;
 
@@ -236,7 +230,10 @@ export default function AgentDetailPage() {
             </h1>
             <p className="subtitle">{agentMetadata.description}</p>
           </div>
-          <WalletConnect onAccountChange={setConnectedAccount} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem', alignItems: 'flex-end' }}>
+            <small style={{ color: '#666', fontSize: '0.75rem', fontStyle: 'italic' }}>Optional: Auto-fill address</small>
+            <WalletConnect onAccountChange={setConnectedAccount} />
+          </div>
         </div>
 
         <div className="agent-detail-grid">
@@ -286,17 +283,23 @@ export default function AgentDetailPage() {
               <h2>Execute Agent</h2>
 
               <form onSubmit={handleExecute} className="execution-form">
+                <div style={{ padding: '1rem', background: 'rgba(102, 126, 234, 0.1)', borderRadius: '8px', marginBottom: '1rem', borderLeft: '3px solid #667eea' }}>
+                  <p style={{ margin: 0, fontSize: '0.875rem', color: '#333' }}>
+                    ℹ️ <strong>No wallet signature required.</strong> This agent executes on the backend. You only need to provide an address to analyze.
+                  </p>
+                </div>
+
                 <div className="form-group">
                   <label>User Address</label>
                   <input
                     type="text"
                     value={userAddress}
                     onChange={(e) => setUserAddress(e.target.value)}
-                    placeholder="0x..."
+                    placeholder="0x... (or connect wallet above)"
                     required
                     disabled={loading}
                   />
-                  <small>The wallet address to analyze</small>
+                  <small>Connect wallet above to auto-fill, or enter any address to analyze</small>
                 </div>
 
                 {agentMetadata.parameters.map((param) => (
