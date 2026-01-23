@@ -106,12 +106,6 @@ export async function toggleAI(enabled: boolean): Promise<{ status: string; aiEn
   return response.data;
 }
 
-// Toggle AI mode
-export async function toggleAI(enabled: boolean): Promise<{ status: string; aiEnabled: boolean; message: string }> {
-  const response = await api.post("/agents/toggle-ai", { enabled });
-  return response.data;
-}
-
 // Utility functions
 export function weiToEther(wei: string): string {
   const weiNum = BigInt(wei);
