@@ -11,7 +11,7 @@ export default function Layout({ children }: LayoutProps) {
       <nav className="navbar">
         <div className="nav-container">
           <Link href="/" className="nav-logo">
-            <img src="/sentinel_logo.png" alt="Sentinel" className="hero-logo-image" />
+            <img src="/_MConverter.eu_video.gif" alt="Sentinel" className="hero-logo-image" />
             Sentinel SimpleVault 
           </Link>
           <div className="nav-links">
