@@ -57,9 +57,15 @@ export default function Home() {
   async function handleToggleAI() {
     try {
       setTogglingAI(true);
+      setError(null);
       const newState = !aiEnabled;
       const result = await toggleAI(newState);
       setAiEnabled(result.aiEnabled);
+      
+      // Reload agents to reflect AI mode change
+      const agentData = await listAgents();
+      setAgents(agentData.agents);
+      setAiEnabled(agentData.aiEnabled);
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to toggle AI mode");
     } finally {
