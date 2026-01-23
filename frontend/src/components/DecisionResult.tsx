@@ -15,6 +15,44 @@ export default function DecisionResult({ result }: DecisionResultProps) {
       ? "medium"
       : "low";
 
+  // Parse gas-fee-monitor reason for better formatting
+  const isGasMonitor = result.agentId === "gas-fee-monitor";
+  const parseGasReason = (reason: string) => {
+    const match = reason.match(/High gas=([\d.]+)Gwei \(T:([\d.]+) M:([\d.]+)\)\. (.+)\. Est tx cost: ([\d.]+) TCRO/);
+    if (match) {
+      return {
+        avgGas: match[1],
+        testnetGas: match[2],
+        mainnetGas: match[3],
+        recommendation: match[4],
+        txCost: match[5]
+      };
+    }
+    const lowMatch = reason.match(/Low gas=([\d.]+)Gwei \(T:([\d.]+) M:([\d.]+)\)\. (.+)\. Est tx cost: ([\d.]+) TCRO/);
+    if (lowMatch) {
+      return {
+        avgGas: lowMatch[1],
+        testnetGas: lowMatch[2],
+        mainnetGas: lowMatch[3],
+        recommendation: lowMatch[4],
+        txCost: lowMatch[5]
+      };
+    }
+    const normalMatch = reason.match(/Normal gas=([\d.]+)Gwei \(T:([\d.]+) M:([\d.]+)\)\. (.+)\. Est tx cost: ([\d.]+) TCRO/);
+    if (normalMatch) {
+      return {
+        avgGas: normalMatch[1],
+        testnetGas: normalMatch[2],
+        mainnetGas: normalMatch[3],
+        recommendation: normalMatch[4],
+        txCost: normalMatch[5]
+      };
+    }
+    return null;
+  };
+
+  const gasData = isGasMonitor ? parseGasReason(result.decision.reason) : null;
+
   return (
     <div className="decision-result">
       <div className="result-header">
@@ -34,7 +72,20 @@ export default function DecisionResult({ result }: DecisionResultProps) {
         </div>
         <div className="result-row">
           <span className="label">Reason:</span>
-          <span className="value">{result.decision.reason}</span>
+          {gasData ? (
+            <div className="value" style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <div><strong>Gas Prices:</strong></div>
+              <ul style={{ margin: 0, paddingLeft: '1.5rem', listStyle: 'disc' }}>
+                <li>Average: {gasData.avgGas} Gwei ({(parseFloat(gasData.avgGas) / 1e9).toFixed(9)} CRO/gas)</li>
+                <li>Testnet (T): {gasData.testnetGas} Gwei ({(parseFloat(gasData.testnetGas) / 1e9).toFixed(9)} CRO/gas)</li>
+                <li>Mainnet (M): {gasData.mainnetGas} Gwei ({(parseFloat(gasData.mainnetGas) / 1e9).toFixed(9)} CRO/gas)</li>
+              </ul>
+              <div><strong>Recommendation:</strong> {gasData.recommendation}</div>
+              <div><strong>Estimated TX Cost:</strong> {gasData.txCost} TCRO</div>
+            </div>
+          ) : (
+            <span className="value">{result.decision.reason}</span>
+          )}
         </div>
       </div>
 
