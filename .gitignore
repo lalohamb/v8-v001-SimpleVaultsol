@@ -52,3 +52,7 @@ package-lock.json
 
 # Remove directory ignore_docs
 /ignore_docs/
+/frontend-cronos-sentinal/
+/wiki/
+/contracts/scripts/
+/contracts/temp_contracts/
