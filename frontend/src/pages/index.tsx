@@ -4,7 +4,7 @@ import Layout from "../components/Layout";
 import VaultInteraction from "../components/VaultInteraction";
 import WelcomeModal from "../components/WelcomeModal";
 import StatusModal from "../components/StatusModal";
-import { listAgents, checkHealth, toggleAI } from "../lib/api";
+import { listAgents, checkHealth } from "../lib/api";
 import type { AgentInfo } from "../types/api";
 
 export default function Home() {
@@ -15,7 +15,6 @@ export default function Home() {
   const [error, setError] = useState<string | null>(null);
   const [showWelcome, setShowWelcome] = useState(false);
   const [showStatus, setShowStatus] = useState(false);
-  const [togglingAI, setTogglingAI] = useState(false);
 
   useEffect(() => {
     const hasSeenWelcome = localStorage.getItem("hasSeenWelcome");
@@ -53,25 +52,6 @@ export default function Home() {
 
     loadData();
   }, []);
-
-  async function handleToggleAI() {
-    try {
-      setTogglingAI(true);
-      setError(null);
-      const newState = !aiEnabled;
-      const result = await toggleAI(newState);
-      setAiEnabled(result.aiEnabled);
-      
-      // Reload agents to reflect AI mode change
-      const agentData = await listAgents();
-      setAgents(agentData.agents);
-      setAiEnabled(agentData.aiEnabled);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to toggle AI mode");
-    } finally {
-      setTogglingAI(false);
-    }
-  }
 
   return (
     <Layout>
@@ -124,18 +104,11 @@ export default function Home() {
             </div>
           </div>
 
-          <div className="status-card ai-toggle-card">
+          <div className="status-card">
             <h3>AI Mode</h3>
             <div className={`status-indicator ${aiEnabled ? "ok" : "warning"}`}>
               {aiEnabled ? "✓ ENABLED" : "⚠ Fallback Only"}
             </div>
-            <button 
-              onClick={handleToggleAI} 
-              disabled={togglingAI}
-              className="toggle-ai-btn"
-            >
-              {togglingAI ? "Switching..." : aiEnabled ? "Disable AI" : "Enable AI"}
-            </button>
           </div>
 
           <div className="status-card">

@@ -192,11 +192,6 @@ export default function AgentDetailPage() {
       setError(null);
       setResult(null);
 
-      // Validate address format
-      if (!userAddress.match(/^0x[a-fA-F0-9]{40}$/)) {
-        throw new Error("Invalid Ethereum address format. Must be 0x followed by 40 hex characters.");
-      }
-
       const requestedAmountWei = requestedAmount
         ? web3EtherToWei(requestedAmount).toString()
         : undefined;

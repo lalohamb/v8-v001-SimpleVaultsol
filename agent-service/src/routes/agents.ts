@@ -8,16 +8,6 @@ import path from "path";
 
 const router = Router();
 
-// Runtime AI toggle state (overrides env var)
-let aiModeOverride: boolean | null = null;
-
-function isAiEnabled(): boolean {
-  if (aiModeOverride !== null) {
-    return aiModeOverride && !!process.env.OPENAI_API_KEY;
-  }
-  return process.env.ENABLE_AI_AGENTS === "true" && !!process.env.OPENAI_API_KEY;
-}
-
 function mustString(x: any, name: string): string {
   if (!x || typeof x !== "string") throw new Error(`Missing/invalid ${name}`);
   return x;
@@ -30,10 +20,11 @@ function parseWeiOptional(x: any): bigint | undefined {
   throw new Error("requestedAmountWei must be a base-10 integer string (wei)");
 }
 
+//router.get("/list", (_req, res) => res.json({ agents: listAgents() }));
 router.get("/list", (_req, res) => {
   return res.json({
     status: "ok",
-    aiEnabled: isAiEnabled(),
+    aiEnabled: process.env.ENABLE_AI_AGENTS === "true" && !!process.env.OPENAI_API_KEY,
     agents: listAgents()
   });
 });
@@ -81,11 +72,6 @@ router.post("/apply", async (req, res) => {
       decision.reason.startsWith("ai:")
         ? "ai"
         : "fallback";
-
-    // Override AI mode if runtime toggle is active
-    if (aiModeOverride !== null) {
-      process.env.ENABLE_AI_AGENTS = aiModeOverride ? "true" : "false";
-    }
 
 
     // Clamp policy (defaults; override per agent later if desired)
@@ -137,21 +123,51 @@ router.post("/apply", async (req, res) => {
 /**
  * POST /agents/toggle-ai
  * Body: { "enabled": true/false }
- * Toggles AI mode on/off using runtime override
+ * Toggles AI mode on/off by updating the ENABLE_AI_AGENTS env variable
  */
 router.post("/toggle-ai", async (req, res) => {
   try {
     const enabled = req.body?.enabled === true;
-    
-    // Set runtime override (persists until server restart)
-    aiModeOverride = enabled;
-    
-    const aiEnabled = isAiEnabled();
+
+    // Update the environment variable in memory
+    process.env.ENABLE_AI_AGENTS = enabled ? "true" : "false";
+
+    // Also update the .env file for persistence
+    const envPath = path.join(process.cwd(), ".env");
+
+    try {
+      let envContent = "";
+      if (fs.existsSync(envPath)) {
+        envContent = fs.readFileSync(envPath, "utf-8");
+      }
+
+      // Update or add ENABLE_AI_AGENTS
+      const lines = envContent.split("\n");
+      let found = false;
+      const updatedLines = lines.map(line => {
+        if (line.startsWith("ENABLE_AI_AGENTS=")) {
+          found = true;
+          return `ENABLE_AI_AGENTS=${enabled}`;
+        }
+        return line;
+      });
+
+      if (!found) {
+        updatedLines.push(`ENABLE_AI_AGENTS=${enabled}`);
+      }
+
+      fs.writeFileSync(envPath, updatedLines.join("\n"));
+    } catch (fileError) {
+      console.warn("Could not update .env file:", fileError);
+      // Continue anyway - the in-memory change is what matters for current session
+    }
+
+    const aiEnabled = process.env.ENABLE_AI_AGENTS === "true" && !!process.env.OPENAI_API_KEY;
 
     return res.json({
       status: "ok",
       aiEnabled,
-      message: `AI mode ${aiEnabled ? "enabled" : "disabled"} (runtime override active)`
+      message: `AI mode ${aiEnabled ? "enabled" : "disabled"}`
     });
   } catch (e: any) {
     return res.status(400).json({ error: e?.message || "Bad request" });
